@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   try {
     const NOTION_TOKEN = process.env.NOTION_TOKEN;
-    const NOTION_MEMBERS_DATABASE_ID = process.env.NOTION_DATABASE_ID;
+    const NOTION_MEMBERS_DATABASE_ID = process.env.NOTION_MEMBERS_DATABASE_ID;
     const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
     function escapeHtml(str) {
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
         .replace(/"/g, "&quot;");
     }
 
-    const notionRes = await fetch(`https://api.notion.com/v1/databases/${DATABASE_ID}/query`, {
+    const notionRes = await fetch(`https://api.notion.com/v1/databases/${NOTION_MEMBERS_DATABASE_ID}/query`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${NOTION_TOKEN}`,
