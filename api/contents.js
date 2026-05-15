@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       const p = page.properties;
       return {
         title: p["セクション名"]?.title?.[0]?.plain_text || "",
-        text: p["テキスト"]?.rich_text?.[0]?.plain_text || "",
+        richText: p["テキスト"]?.rich_text || [],
         url: p["URL"]?.url || ""
       };
     });
