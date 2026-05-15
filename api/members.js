@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   try {
     const NOTION_TOKEN = process.env.NOTION_TOKEN;
-    const DATABASE_ID = process.env.NOTION_DATABASE_ID;
+    const NOTION_MEMBERS_DATABASE_ID = process.env.NOTION_DATABASE_ID;
 
     function escapeHtml(str) {
       if (!str) return "";
