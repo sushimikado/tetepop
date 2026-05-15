@@ -9,72 +9,86 @@ async function fetchNotionData() {
         if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
         
         const data = await response.json();
+        console.log("Raw Data:", data); // デバッグ用
+
         app.innerHTML = '';
 
-        // 1. ページのメインブロックを特定（IDが一致するもの、もしくはtypeがpageのもの）
-        // IDはハイフンなしで来る場合があるため、正規化して探します
-        const rootKey = Object.keys(data).find(key => key.replace(/-/g, '') === PAGE_ID.replace(/-/g, ''));
-        const rootBlock = data[rootKey]?.value;
+        // 1. データの正規化（.valueがある場合とない場合の両方に対応）
+        const blocks = {};
+        Object.keys(data).forEach(key => {
+            // data[key].value があればそれを、なければ data[key] 自体を採用
+            blocks[key.replace(/-/g, '')] = data[key].value || data[key];
+        });
 
-        if (!rootBlock || !rootBlock.content) {
-            console.error("ページの中身が見つかりません。rootBlock:", rootBlock);
-            app.innerHTML = '<p>データ構造が想定外です。コンソールを確認してください。</p>';
-            return;
+        // 2. ルートとなるページブロックを探す
+        const rootId = PAGE_ID.replace(/-/g, '');
+        let rootBlock = blocks[rootId];
+
+        // もしIDで見つからなければ、typeが"page"のものを探す
+        if (!rootBlock) {
+            const pageKey = Object.keys(blocks).find(k => blocks[k].type === 'page');
+            rootBlock = blocks[pageKey];
         }
 
-        // 2. rootBlock.content に入っている「IDのリスト」順に描画する
-        rootBlock.content.forEach(blockId => {
-            const block = data[blockId]?.value;
-            if (!block) return;
+        // 3. 表示処理
+        // rootBlockのcontent（子要素IDリスト）がある場合はそれに従う、なければ全ブロックを表示
+        const contentIds = rootBlock?.content || Object.keys(blocks);
+
+        contentIds.forEach(id => {
+            const blockId = id.replace(/-/g, '');
+            const block = blocks[blockId];
+            if (!block || block.type === 'page') return; // ページ自身はスキップ
 
             const type = block.type;
-            // テキスト抽出（入れ子配列を平滑化）
-            const text = block.properties?.title ? block.properties.title.map(t => t[0]).join('') : '';
+            const properties = block.properties;
+            if (!properties && type !== 'image') return;
+
+            // テキストの抽出
+            const text = properties?.title ? properties.title.map(t => t[0]).join('') : '';
 
             const element = document.createElement('div');
             element.className = `notion-block notion-${type}`;
 
             switch (type) {
-                case 'header': // 見出し1
+                case 'header':
                     element.innerHTML = `<h2 class="notion-h1">${text}</h2>`;
                     break;
-                case 'sub_header': // 見出し2
+                case 'sub_header':
                     element.innerHTML = `<h3 class="notion-h2">${text}</h3>`;
                     break;
-                case 'sub_sub_header': // 見出し3
+                case 'sub_sub_header':
                     element.innerHTML = `<h4 class="notion-h3">${text}</h4>`;
                     break;
                 case 'text':
-                    if (text) {
-                        element.innerHTML = `<p class="notion-text">${text}</p>`;
-                    } else {
-                        element.innerHTML = `<br>`; // 空行
-                    }
+                    element.innerHTML = text ? `<p class="notion-text">${text}</p>` : `<br>`;
                     break;
                 case 'image':
-                    const imgUrl = block.format?.display_source || block.properties?.source?.[0]?.[0];
-                    if (imgUrl) {
-                        // Notionの画像URLは署名付きURLに変換される
-                        const finalImgUrl = imgUrl.startsWith("http") ? imgUrl : `https://www.notion.so/image/${encodeURIComponent(imgUrl)}?table=block&id=${block.id}`;
-                        element.innerHTML = `<img src="${finalImgUrl}" class="notion-image" style="width:100%; max-width:600px; display:block; margin:20px auto;">`;
+                    const rawUrl = block.format?.display_source || properties?.source?.[0]?.[0];
+                    if (rawUrl) {
+                        // Notionの画像URLをブラウザで表示可能な形式に変換
+                        let imgUrl = rawUrl;
+                        if (rawUrl.startsWith("/")) {
+                            imgUrl = `https://www.notion.so${rawUrl}`;
+                        }
+                        element.innerHTML = `<img src="${imgUrl}" class="notion-image" style="width:100%; max-width:600px; display:block; margin:20px auto; border-radius:8px;">`;
                     }
                     break;
                 case 'bulleted_list':
                     element.innerHTML = `<ul class="notion-list"><li>${text}</li></ul>`;
                     break;
                 default:
-                    console.log("スキップしたブロックタイプ:", type);
+                    // 未対応のものは無視するか、ログを出す
                     break;
             }
             app.appendChild(element);
         });
 
-        // ページタイトルをHTMLのtitleタグに反映
-        const pageTitle = rootBlock.properties?.title?.[0]?.[0];
-        if (pageTitle) document.title = pageTitle;
+        if (app.innerHTML === '') {
+            app.innerHTML = '<p>表示できるコンテンツが見つかりませんでした。</p>';
+        }
 
     } catch (error) {
-        console.error("エラー詳細:", error);
+        console.error("Error:", error);
         app.innerHTML = `<p>エラーが発生しました: ${error.message}</p>`;
     }
 }
