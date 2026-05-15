@@ -1,6 +1,12 @@
 body { font-family: sans-serif; padding: 20px; }
 #content-list { max-width: 800px; margin: 0 auto; }
 
+:root {
+  --text-color-1: #523f31;
+  --text-color-2: #755a46;
+  --bg-color: #FFD633;
+}
+
 .notion-item {
     background: #f9f9f9;
     border-radius: 8px;
@@ -23,4 +29,212 @@ body { font-family: sans-serif; padding: 20px; }
 
 .item-body p a:hover {
     opacity: 0.7;
+}
+
+
+
+
+body {
+  padding: 24px;
+  font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text-color-1);
+  background: var(--bg-color);
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* ======== メンバー ======== */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.08);
+}
+
+/* 画像ラッパー */
+.image-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+/* 画像トリミング */
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-bottom {
+  padding: 12px 16px 16px 16px;
+  text-align: left;
+}
+
+.name {
+  font-weight: 700;
+}
+
+.yomi {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-color-2);
+}
+
+.links {
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 24px;
+  margin: 0px 0px 0px -2px;
+}
+
+.role {
+  font-weight: 500;
+  color: var(--text-color-1);
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 10px 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  border: 1px solid var(--text-color-1);
+}
+
+/* アイコン */
+/* 共通 */
+.icon {
+  display: flex;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+} 
+
+.icon-svg {
+  display: block;
+  color: var(--text-color-1);
+  transition: transform 0.15s ease;
+}
+
+/* 個別 */
+.icon-svg.x {
+  height: 15pt;
+}
+
+.icon-svg.youtube {
+  height: 12pt;
+}
+
+.icon-svg.twitch {
+  height: 18pt;
+}
+
+.icon-svg.tiktok {
+  height: 18pt;
+}
+
+/* hover */
+.icon:hover .icon-svg {
+  transform: scale(1.20);
+}
+
+/* その他URL */
+.other {
+  margin: -4px 0px 14px 0px;
+  font-size: 12px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  transition: transform 0.15s ease;
+}
+
+.other a {
+  color: var(--text-color-1);
+  text-decoration: underline;
+}
+
+.other a:hover {
+  color: var(--text-color-2);
+}
+
+/* ======== 配信中枠 ======== */
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card-link:hover .card {
+  transform: translateY(-3px);
+  box-shadow: 4px 6px 16px rgba(0,0,0,0.12);
+}
+
+.thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb-empty {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  background: #AAAAAA;
+  font-size: 21px;
+  font-weight: 700;
+  color: #CCCCCC;
+  justify-content: center;
+  align-items: center;
+}
+
+.live-badge {
+  display: inline-block;
+  background: #ff3b30;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 0px 0px 6px -2px;
+}
+
+.live-badge-empty {
+  display: inline-block;
+  background: #666666;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 0px 0px 6px -2px;
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+  width: 100%;
+}
+
+.empty {
+  color: #666;
+  font-size: 14px;
 }
