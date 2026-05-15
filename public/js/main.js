@@ -1,4 +1,3 @@
-// NotionページID
 const PAGE_ID = "358b6b10f3088162aa32f50b432cc510";
 
 async function fetchNotionData() {
@@ -9,41 +8,42 @@ async function fetchNotionData() {
         if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
         
         const data = await response.json();
-        console.log("Raw Data:", data); // デバッグ用
-
         app.innerHTML = '';
 
-        // 1. データの正規化（.valueがある場合とない場合の両方に対応）
-        const blocks = {};
+        // 1. 全てのキーからハイフンを取り除いた新しいオブジェクトを作る（比較を確実にするため）
+        const normalizedBlocks = {};
         Object.keys(data).forEach(key => {
-            // data[key].value があればそれを、なければ data[key] 自体を採用
-            blocks[key.replace(/-/g, '')] = data[key].value || data[key];
+            const cleanKey = key.replace(/-/g, '');
+            normalizedBlocks[cleanKey] = data[key].value || data[key];
         });
 
-        // 2. ルートとなるページブロックを探す
-        const rootId = PAGE_ID.replace(/-/g, '');
-        let rootBlock = blocks[rootId];
+        const targetId = PAGE_ID.replace(/-/g, '');
+        const rootBlock = normalizedBlocks[targetId];
 
-        // もしIDで見つからなければ、typeが"page"のものを探す
         if (!rootBlock) {
-            const pageKey = Object.keys(blocks).find(k => blocks[k].type === 'page');
-            rootBlock = blocks[pageKey];
+            console.error("Root block not found. IDs in data:", Object.keys(normalizedBlocks));
+            app.innerHTML = '<p>指定されたページIDがデータ内に見つかりません。</p>';
+            return;
         }
 
-        // 3. 表示処理
-        // rootBlockのcontent（子要素IDリスト）がある場合はそれに従う、なければ全ブロックを表示
-        const contentIds = rootBlock?.content || Object.keys(blocks);
+        // 2. ページ内のコンテンツIDリストを取得
+        const contentIds = rootBlock.content || [];
 
+        if (contentIds.length === 0) {
+            app.innerHTML = '<p>ページはありますが、中身（ブロック）が空のようです。</p>';
+            return;
+        }
+
+        // 3. 各ブロックをループして描画
         contentIds.forEach(id => {
-            const blockId = id.replace(/-/g, '');
-            const block = blocks[blockId];
-            if (!block || block.type === 'page') return; // ページ自身はスキップ
+            const cleanId = id.replace(/-/g, '');
+            const block = normalizedBlocks[cleanId];
+            if (!block) return;
 
             const type = block.type;
             const properties = block.properties;
-            if (!properties && type !== 'image') return;
-
-            // テキストの抽出
+            
+            // テキスト抽出
             const text = properties?.title ? properties.title.map(t => t[0]).join('') : '';
 
             const element = document.createElement('div');
@@ -65,27 +65,32 @@ async function fetchNotionData() {
                 case 'image':
                     const rawUrl = block.format?.display_source || properties?.source?.[0]?.[0];
                     if (rawUrl) {
-                        // Notionの画像URLをブラウザで表示可能な形式に変換
                         let imgUrl = rawUrl;
+                        // Notion内の画像ならプロキシ経由のURLに変換（簡易版）
                         if (rawUrl.startsWith("/")) {
                             imgUrl = `https://www.notion.so${rawUrl}`;
                         }
-                        element.innerHTML = `<img src="${imgUrl}" class="notion-image" style="width:100%; max-width:600px; display:block; margin:20px auto; border-radius:8px;">`;
+                        element.innerHTML = `<img src="${imgUrl}" class="notion-image" style="width:100%; border-radius:8px; margin:1em 0;">`;
                     }
                     break;
                 case 'bulleted_list':
                     element.innerHTML = `<ul class="notion-list"><li>${text}</li></ul>`;
                     break;
+                case 'callout':
+                    const icon = block.format?.page_icon || '💡';
+                    element.innerHTML = `<div class="notion-callout" style="padding:15px; background:#f1f1f1; border-radius:5px; display:flex; gap:10px;"><span>${icon}</span><span>${text}</span></div>`;
+                    break;
                 default:
-                    // 未対応のものは無視するか、ログを出す
+                    // 知らないタイプはとりあえずテキストとして出す
+                    if(text) element.innerHTML = `<p class="notion-other">${text}</p>`;
                     break;
             }
             app.appendChild(element);
         });
 
-        if (app.innerHTML === '') {
-            app.innerHTML = '<p>表示できるコンテンツが見つかりませんでした。</p>';
-        }
+        // ページタイトルを反映
+        const pageTitle = rootBlock.properties?.title?.[0]?.[0];
+        if (pageTitle) document.title = pageTitle;
 
     } catch (error) {
         console.error("Error:", error);
