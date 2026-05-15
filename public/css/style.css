@@ -12,3 +12,15 @@ body { font-family: sans-serif; padding: 20px; }
 .item-title { margin-top: 0; font-size: 1.4rem; }
 .item-text { color: #555; line-height: 1.6; }
 .item-link { color: #0066cc; font-size: 0.9rem; }
+
+
+/* Notion内のテキストリンク用 */
+.item-body p a {
+    color: #0066cc;
+    text-decoration: underline;
+    transition: opacity 0.2s;
+}
+
+.item-body p a:hover {
+    opacity: 0.7;
+}
