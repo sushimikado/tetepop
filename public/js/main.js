@@ -1,3 +1,4 @@
+/* get-notion */
 async function loadNotionData() {
     const container = document.getElementById('notion-content');
 
@@ -33,3 +34,17 @@ async function loadNotionData() {
 }
 
 loadNotionData();
+
+/* live */
+fetch('/api/live')
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById('live').innerHTML = html;
+  });
+
+/* members */
+fetch('/api/members')
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById('members').innerHTML = html;
+  });
