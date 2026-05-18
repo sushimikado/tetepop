@@ -364,7 +364,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5%;
-  margin-left: -0.5rem;
+  margin: 4px -0.5rem 4px;
 }
 
 .role {
