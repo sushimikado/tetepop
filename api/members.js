@@ -176,10 +176,8 @@ function getPlatformIcon(url) {
 </div>`;
     }).join("");
 
-    const finalHtml = `<div class="grid">${cardList}</div>`;
-
     res.setHeader("Content-Type", "text/html");
-    res.status(200).send(finalHtml);
+    res.status(200).send(cardList);
 
   } catch (e) {
     res.status(500).json({ error: e.message });
