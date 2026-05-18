@@ -1,46 +1,301 @@
-body { font-family: sans-serif; padding: 20px; }
-#content-list { max-width: 800px; margin: 0 auto; }
+@charset "UTF-8";
 
 :root {
-  --text-color-1: #523f31;
-  --text-color-2: #755a46;
-  --bg-color: #FFD633;
+  --color-1: #507dbe;
+  --color-2: #73b4e6;
+  --color-3: #afd278;
+  --color-4: #eb8c64;
+  --color-5: #f596be;
+  --color-6: #3d3d3d;
+  --color-7: #fbfcf7;
+  --color-8: #ffffff;
 }
 
-.notion-item {
-    background: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-left: 4px solid #333;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-.item-title { margin-top: 0; font-size: 1.4rem; }
-.item-text { color: #555; line-height: 1.6; }
-.item-link { color: #0066cc; font-size: 0.9rem; }
+html {
+  font-size: 62.5%;
+}
 
+/* .line-seed-jp-regular {
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 400;
+  font-weight: 700;
+  font-weight: 800;
+  font-style: normal;
+} */
 
-/* Notion内のテキストリンク用 */
-.item-body p a {
-    color: #0066cc;
+/* .righteous-regular {
+  font-family: "Righteous", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+} */
+
+body {
+  background: var(--color-7);
+  background-image: linear-gradient(0deg, transparent calc(100% - 1px), var(--color-2) calc(100% - 1px)),
+                    linear-gradient(90deg, transparent calc(100% - 1px), var(--color-2) calc(100% - 1px));
+  background-size: 30px 30px;
+  background-repeat: repeat;
+  background-position: center center;
+  background-attachment: fixed;
+
+  font-family: "LINE Seed JP", sans-serif;
+  font-weight: 400;
+  color: var(--color-6);
+  font-size: 1.6rem;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+
+body a {
+    color: var(--color-1);
     text-decoration: underline;
     transition: opacity 0.2s;
 }
 
-.item-body p a:hover {
-    opacity: 0.7;
+body a:hover {
+    opacity: 0.6;
 }
 
-
-
-
-body {
-  padding: 24px;
-  font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--text-color-1);
-  background: var(--bg-color);
+.container-body {
+  max-width: 1440px;
+  margin: auto;
+  border: solid 3px var(--color-1);
+  border-width: 0px 3px;
+  background: var(--color-7);
 }
 
+/* ======== ヘッダー ======== */
+header {
+  display: flex;
+  justify-content:space-between;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--color-7);
+  border-bottom: solid 3px var(--color-1);
+}
+
+.header__mark {
+  border-right: solid 3px var(--color-1);
+  padding: 10px 2.4%;
+}
+
+.header__mark a {
+  display: flex;
+  align-items: center;
+}
+
+.nav {
+  background: var(--color-2);
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  transform: translateX(100%);
+  transition: transform 0.4s;
+}
+
+.nav__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 6px 1%; */
+  border-bottom: solid 3px var(--color-8);
+}
+
+.nav.active {
+  transform: translateX(0);
+}
+
+.nav__mark {
+  border-right: solid 3px var(--color-8);
+  padding: 10px 2.4%;
+}
+
+.nav__mark a {
+  display: flex;
+  align-items: center;
+}
+
+.nav__mark--img {
+  height: 6rem;
+  width: auto;
+}
+
+.nav__btn {
+  display: flex;
+  align-items: center;
+  padding-right: 4.8%;
+}
+
+.nav__btn--close, .nav__btn--menu {
+  height: 3.6rem;
+  width: auto;
+}
+
+.nav__list {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 7.2% 18px;
+  height: auto;
+}
+
+.nav__list a {
+  display: block;
+  font-family: "Righteous", sans-serif;
+  font-size: 2.4rem;
+  line-height: 2;
+  color: var(--color-8);
+  text-decoration: none;
+}
+
+.header__btn {
+  display: flex;
+  align-items: center;
+  padding-right: 4.8%;
+}
+
+.nav-sp {
+  display: none;
+}
+
+/* @media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+  .nav-sp {
+    display: flex;
+  }
+  .nav-sp a {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
+} */
+
+/* ======== メイン ======== */
+.main-img {
+  display: flex;
+  align-items: center;
+  margin: 60px 0 90px;
+  padding: 3%;
+}
+
+.main-copy h3 {
+  background: var(--color-2);
+  border: solid 3px var(--color-1);
+  border-width: 3px 0;
+  text-align: center;
+  line-height: 5;
+  color: var(--color-8);
+}
+
+.main-article {
+  padding: 0 3% 90px;
+}
+
+.section-container {
+  padding-top: 120px;
+}
+
+.section-top {
+  display: flex;
+  margin-bottom: -1.5rem;
+}
+
+.item-title {
+  display: flex;
+  align-items: center;
+  font-family: "Righteous", sans-serif;
+  color: var(--color-1);
+  font-size: 6rem;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.section-bottom {
+  /* margin-bottom: 120px; */
+  position: relative;
+  z-index: 1;
+}
+
+.item-titleJa {
+  padding: 1.2rem 2.4rem;
+  border: solid 3px var(--color-1);
+  border-radius: 18px 18px 0px 0px;
+  color: var(--color-8);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  /* box-shadow: var(--color-1) 5px 5px 0px; */
+}
+
+#ABOUT .item-titleJa {
+  background: var(--color-4);
+}
+
+#NEWS .item-titleJa {
+  background: var(--color-3);
+}
+
+#STREAM .item-titleJa {
+  background: var(--color-5);
+}
+
+#MEMBERS .item-titleJa {
+  background: var(--color-2);
+}
+
+.item-body {
+  padding: 1.8rem 2.4rem;
+  background: var(--color-8);
+  border: solid 3px var(--color-1);
+  border-width: 0px 3px 3px 3px;
+  border-radius: 0px 0px 18px 18px;
+  /* box-shadow: var(--color-1) 5px 5px 0px; */
+}
+
+/* Xが自動生成する要素をコントロール */
+/* 本来の550pxより大きくはならないよ */
+.x-embed {
+    display: flex;
+    max-width: 480px !important;
+    padding-top: 6px;
+}
+
+.about-and-news {
+  display: flex;
+  justify-content: space-between;
+  gap: 2%;
+}
+
+.about-and-news .section-container {
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .about-and-news {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.about__text {
+  padding-bottom: 1.6rem;
+}
+
+.tag__text {
+  padding-top: 1.6rem;
+}
+
+/* ======== メンバー表 ======== */
 .container {
   max-width: 1440px;
   margin: 0 auto;
@@ -53,7 +308,6 @@ body {
   gap: 20px;
 }
 
-/* ======== メンバー ======== */
 .card {
   display: flex;
   flex-direction: column;
@@ -174,7 +428,7 @@ body {
   color: var(--text-color-2);
 }
 
-/* ======== 配信中枠 ======== */
+/* ======== 配信スケジュール ======== */
 .card-link {
   text-decoration: none;
   color: inherit;
