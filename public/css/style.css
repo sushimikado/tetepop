@@ -322,6 +322,7 @@ header {
   border: solid 3px var(--color-1);
   border-radius: 8px;
   overflow: hidden;
+  justify-content: space-between;
 }
 
 /* 画像ラッパー */
@@ -329,6 +330,7 @@ header {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 /* 画像トリミング */
@@ -341,6 +343,7 @@ header {
 .card-bottom {
   padding: 12px 5% 16px;
   text-align: left;
+  flex-grow: 1;
 }
 
 .name {
