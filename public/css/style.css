@@ -322,8 +322,6 @@ header {
   border: solid 3px var(--color-1);
   border-radius: 8px;
   overflow: hidden;
-  height: 100%;
-  justify-content: flex-start;
 }
 
 /* 画像ラッパー */
@@ -331,7 +329,6 @@ header {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  flex-shrink: 0;
 }
 
 /* 画像トリミング */
