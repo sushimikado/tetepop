@@ -134,9 +134,17 @@ header {
   padding-right: 4.8%;
 }
 
-.nav__btn--close, .nav__btn--menu {
+.nav__btn--close,
+.nav__btn--menu {
   height: 3.6rem;
   width: auto;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.nav__btn--close:hover,
+.nav__btn--menu:hover {
+  opacity: 0.6;
 }
 
 .nav__list {
@@ -297,7 +305,6 @@ header {
 
 /* ======== メンバー表 ======== */
 .container {
-  max-width: 1440px;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -305,7 +312,7 @@ header {
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  gap: 1.5%;
 }
 
 .card {
@@ -314,7 +321,6 @@ header {
   background: white;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.08);
 }
 
 /* 画像ラッパー */
@@ -332,7 +338,7 @@ header {
 }
 
 .card-bottom {
-  padding: 12px 16px 16px 16px;
+  padding: 12px 2% 16px;
   text-align: left;
 }
 
@@ -341,35 +347,31 @@ header {
 }
 
 .yomi {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-color-2);
+  font-size: 1.2rem;
 }
 
 .links {
   margin: 12px 0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 2%;
 }
 
 .roles {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 1.5%;
   min-height: 24px;
-  margin: 0px 0px 0px -2px;
+  margin-left: -2rem;
 }
 
 .role {
-  font-weight: 500;
-  color: var(--text-color-1);
+  font-size: 1.2rem;
   display: inline-flex;
   align-items: center;
-  padding: 1px 10px 3px 10px;
+  padding: 1px 1.2rem;
   border-radius: 999px;
-  font-size: 11px;
-  border: 1px solid var(--text-color-1);
+  border: solid 1px var(--text-color-1);
 }
 
 /* アイコン */
@@ -385,24 +387,24 @@ header {
 .icon-svg {
   display: block;
   color: var(--text-color-1);
-  transition: transform 0.15s ease;
+  transition: transform 0.2s ease;
 }
 
 /* 個別 */
 .icon-svg.x {
-  height: 15pt;
+  height: 1.5rem;
 }
 
 .icon-svg.youtube {
-  height: 12pt;
+  height: 1.2rem;
 }
 
 .icon-svg.twitch {
-  height: 18pt;
+  height: 1.8rem;
 }
 
 .icon-svg.tiktok {
-  height: 18pt;
+  height: 1.8rem;
 }
 
 /* hover */
@@ -413,20 +415,20 @@ header {
 /* その他URL */
 .other {
   margin: -4px 0px 14px 0px;
-  font-size: 12px;
+  font-size: 1.2rem;
   word-break: break-word;
   overflow-wrap: anywhere;
-  transition: transform 0.15s ease;
+  transition: transform 0.2s ease;
 }
 
-.other a {
+/* .other a {
   color: var(--text-color-1);
   text-decoration: underline;
 }
 
 .other a:hover {
   color: var(--text-color-2);
-}
+} */
 
 /* ======== 配信スケジュール ======== */
 .card-link {
