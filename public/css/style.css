@@ -305,7 +305,6 @@ header {
 
 /* ======== メンバー表 ======== */
 .container {
-  max-width: 1005;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -313,7 +312,7 @@ header {
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.5%;
+  gap: 16px;
 }
 
 .card {
@@ -323,6 +322,7 @@ header {
   border: solid 3px var(--color-1);
   border-radius: 8px;
   overflow: hidden;
+  height: 100%;
 }
 
 /* 画像ラッパー */
@@ -330,6 +330,7 @@ header {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 /* 画像トリミング */
@@ -340,8 +341,9 @@ header {
 }
 
 .card-bottom {
-  padding: 12px 5% 16px;
+  padding: 12px 16px 16px;
   text-align: left;
+  flex-glow: 1;
 }
 
 .name {
@@ -383,6 +385,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 24px;
+  height: 24px;
 } 
 
 .icon-svg {
