@@ -139,13 +139,16 @@ function getPlatformIcon(url) {
       return a.yomi.localeCompare(b.yomi, "ja");
     });
 
-    const cards = members.map(m => `
-<div class="card">
-  ${m.image ? `
-  <div class="image-wrap">
-    <img class="avatar" src="${m.image}">
-  </div>` : ""}
+// ==================== HTML ====================
+    const cardList = members.map(m => {
+      const imageHtml = m.image 
+        ? `<div class="image-wrap"><img class="avatar" src="${m.image}" alt="${escapeHtml(m.name)}の画像"></div>` 
+        : '';
 
+      return `
+
+<div class="card">
+  ${imageHtml}
   <div class="card-bottom">
     <div class="name">${escapeHtml(m.name)}</div>
     <div class="yomi">${escapeHtml(m.yomi)}</div>
@@ -162,19 +165,21 @@ function getPlatformIcon(url) {
       </div>
     ` : ""}
     
-<div class="roles">
-  ${m.roles.map(r => `
-    <span class="role" style="${getRoleStyle(r.color)}">
-      ${escapeHtml(r.name)}
-    </span>
-  `).join("")}
-</div>
+    <div class="roles">
+      ${m.roles.map(r => `
+        <span class="role" style="${getRoleStyle(r.color)}">
+          ${escapeHtml(r.name)}
+        </span>
+      `).join("")}
+    </div>
   </div>
-</div>
-`).join("");
+</div>`;
+    }).join("");
+
+    const finalHtml = `<div class="grid">${cardList}</div>`;
 
     res.setHeader("Content-Type", "text/html");
-    res.status(200).send(cards);
+    res.status(200).send(finalHtml);
 
   } catch (e) {
     res.status(500).json({ error: e.message });
