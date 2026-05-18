@@ -7,8 +7,7 @@ function renderRichText(richTextArray) {
         if (t.href) {
             return `<a href="${t.href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
         }
-        
-        // 太字などの装飾も反映したい場合（必要なら）
+        // 太字などの装飾も反映したい場合
         if (t.annotations.bold) text = `<b>${text}</b>`;
         if (t.annotations.italic) text = `<i>${text}</i>`;
         
@@ -18,27 +17,67 @@ function renderRichText(richTextArray) {
 
 async function loadNotionCMS() {
     try {
-        const response = await fetch('/api/contents');
+        // main.js の一時的な書き換え
+        const response = await fetch('/test-data.json'); // ローカルのファイルを見る
+        /* const response = await fetch('/api/contents'); ←あとで書き換える*/
         const contents = await response.json();
 
         contents.forEach(item => {
-            const target = document.getElementById(item.title);
-            if (target) {
-                // ★修正：renderRichText関数を使って本文を作る
-                const bodyHtml = renderRichText(item.richText);
-                
-                target.innerHTML = `
-                    <h2 class="item-title">${item.title}</h2>
-                    <div class="item-body">
-                        <p>${bodyHtml}</p>
-                        ${item.url ? `<a href="${item.url}" class="link">Link</a>` : ''}
-                    </div>
-                `;
-                target.classList.add('loaded');
+            const jaTitle = item.sectionJa || item.titleJa || ""; 
+
+            // 1. 英語タイトル（セクション名）の流し込み
+            const titleTarget = document.querySelector(`[data-cms-title="${item.title}"]`);
+            if (titleTarget) {
+                titleTarget.textContent = item.title;
+            }
+
+            // ★ここを追加：ナビゲーション用の流し込み
+            const navTarget = document.querySelector(`[data-cms-nav="${item.title}"]`);
+            if (navTarget) {
+                navTarget.textContent = item.title;
+            }
+
+            // 2. 日本語タイトルの流し込み
+            const jaTarget = document.querySelector(`[data-cms-titleJa="${item.title}"]`);
+            if (jaTarget && jaTitle) {
+                jaTarget.textContent = jaTitle;
+            }
+
+            // 3. 本文（テキスト）の流し込み
+            const textTarget = document.querySelector(`[data-cms-text="${item.title}"]`);
+            if (textTarget) {
+                if (item.richText.length > 0) {
+                    textTarget.innerHTML = renderRichText(item.richText);
+                    textTarget.style.display = ''; 
+                } else {
+                    textTarget.style.display = 'none'; 
+                }
+            }
+
+            // 4. URL（X埋め込み等）の流し込み
+            const urlTarget = document.querySelector(`[data-cms-url="${item.title}"]`);
+            if (urlTarget) {
+                if (item.url) {
+                    if (item.url.includes('x.com') || item.url.includes('twitter.com')) {
+                        urlTarget.innerHTML = `
+                            <div class="x-embed">
+                                <blockquote class="twitter-tweet"><a href="${item.url}"></a></blockquote>
+                            </div>`;
+                    } else {
+                        urlTarget.innerHTML = `<a href="${item.url}" class="link" target="_blank">Link</a>`;
+                    }
+                    urlTarget.style.display = '';
+                    
+                    if (window.twttr && window.twttr.widgets) {
+                        window.twttr.widgets.load(urlTarget);
+                    }
+                } else {
+                    urlTarget.style.display = 'none';
+                }
             }
         });
 
-        // 2. メンバー表の取得（特定の場所に決め打ちで入れる）
+        // 2. メンバー表の取得
         const memberArea = document.getElementById('MEMBER-LIST');
         if (memberArea) {
             const memRes = await fetch('/api/members');
@@ -49,7 +88,22 @@ async function loadNotionCMS() {
     } catch (error) {
         console.error("読み込みエラー:", error);
     }
+
 }
 
 loadNotionCMS();
 
+// ヘッダーの動き
+'use strict';
+{
+    $(function(){
+        $('.header__btn').on('click', function(){
+            $('.nav').toggleClass('active');
+        });
+
+        $('.nav__btn, .nav__list a').on('click', function(){
+            $('.nav').removeClass('active');
+        });
+    });
+
+}
