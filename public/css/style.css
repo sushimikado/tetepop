@@ -305,6 +305,7 @@ header {
 
 /* ======== メンバー表 ======== */
 .container {
+  max-width: 1005;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -329,7 +330,6 @@ header {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  flex-shrink: 0;
 }
 
 /* 画像トリミング */
@@ -342,7 +342,6 @@ header {
 .card-bottom {
   padding: 12px 5% 16px;
   text-align: left;
-  flex: 1 0 auto;
 }
 
 .name {
