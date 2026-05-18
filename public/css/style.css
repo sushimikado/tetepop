@@ -329,6 +329,7 @@ header {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  border-bottom: 3px var(--color-1);
 }
 
 /* 画像トリミング */
@@ -373,7 +374,7 @@ header {
   align-items: center;
   padding: 1px 1.2rem;
   border-radius: 999px;
-  border: solid 1px var(--text-color-1);
+  border: solid 1px var(--color-1);
 }
 
 /* アイコン */
