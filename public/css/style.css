@@ -339,7 +339,7 @@ header {
 }
 
 .card-bottom {
-  padding: 12px 2% 16px;
+  padding: 12px 5% 16px;
   text-align: left;
 }
 
@@ -352,7 +352,7 @@ header {
 }
 
 .links {
-  margin: 12px 0;
+  margin: 6px 0;
   display: flex;
   align-items: center;
   gap: 2%;
@@ -362,8 +362,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5%;
-  min-height: 24px;
-  margin-left: -2rem;
+  margin-left: -0.5rem;
 }
 
 .role {
@@ -380,8 +379,6 @@ header {
 .icon {
   display: flex;
   align-items: center;
-  width: 24px;
-  height: 24px;
   justify-content: center;
 } 
 
@@ -393,19 +390,19 @@ header {
 
 /* 個別 */
 .icon-svg.x {
-  height: 1.5rem;
+  height: 2rem;
 }
 
 .icon-svg.youtube {
-  height: 1.2rem;
+  height: 1.6rem;
 }
 
 .icon-svg.twitch {
-  height: 1.8rem;
+  height: 2.4rem;
 }
 
 .icon-svg.tiktok {
-  height: 1.8rem;
+  height: 2.4rem;
 }
 
 /* hover */
