@@ -374,7 +374,7 @@ header {
   align-items: center;
   padding: 1px 1.2rem;
   border-radius: 999px;
-  border: solid 1.5px var(--color-6);
+  /* border: solid 1.5px var(--color-6); */
 }
 
 /* アイコン */
@@ -395,19 +395,19 @@ header {
 
 /* 個別 */
 .icon-svg.x {
-  height: 2.25rem;
+  height: 2.1rem;
 }
 
 .icon-svg.youtube {
-  height: 1.8rem;
+  height: 1.68rem;
 }
 
 .icon-svg.twitch {
-  height: 2.7rem;
+  height: 2.52rem;
 }
 
 .icon-svg.tiktok {
-  height: 2.7rem;
+  height: 2.52rem;
 }
 
 /* hover */
