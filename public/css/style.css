@@ -345,14 +345,16 @@ header {
 
 .name {
   font-weight: 700;
+  line-height: 1.5;
 }
 
 .yomi {
   font-size: 1.2rem;
+  line-height: 1.5;
 }
 
 .links {
-  margin: 6px 0;
+  margin: 6px 0 8px;
   display: flex;
   align-items: center;
   gap: 2%;
@@ -412,7 +414,7 @@ header {
 
 /* その他URL */
 .other {
-  margin: -4px 0px 14px 0px;
+  margin: 0px 0px 14px 0px;
   font-size: 1.2rem;
   word-break: break-word;
   overflow-wrap: anywhere;
