@@ -18,8 +18,8 @@ function renderRichText(richTextArray) {
 async function loadNotionCMS() {
     try {
         // main.js の一時的な書き換え
-        const response = await fetch('/test-data.json'); // ローカルのファイルを見る
-        /* const response = await fetch('/api/contents'); ←あとで書き換える*/
+        // const response = await fetch('/test-data.json'); // ローカルのファイルを見る
+        const response = await fetch('/api/contents');
         const contents = await response.json();
 
         contents.forEach(item => {
