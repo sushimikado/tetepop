@@ -369,13 +369,12 @@ header {
 }
 
 .role {
-  color: var(--color-1);
   font-size: 1.2rem;
   display: inline-flex;
   align-items: center;
   padding: 1px 1.2rem;
   border-radius: 999px;
-  border: solid 1.5px var(--color-1);
+  border: solid 1.5px var(--color-6);
 }
 
 /* アイコン */
@@ -384,8 +383,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 27px;
+  height: 27px;
 } 
 
 .icon-svg {
@@ -396,19 +395,19 @@ header {
 
 /* 個別 */
 .icon-svg.x {
-  height: 2.5rem;
+  height: 2.25rem;
 }
 
 .icon-svg.youtube {
-  height: 2rem;
+  height: 1.8rem;
 }
 
 .icon-svg.twitch {
-  height: 3rem;
+  height: 2.7rem;
 }
 
 .icon-svg.tiktok {
-  height: 3rem;
+  height: 2.7rem;
 }
 
 /* hover */
