@@ -382,8 +382,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
 } 
 
 .icon-svg {
@@ -394,19 +394,19 @@ header {
 
 /* 個別 */
 .icon-svg.x {
-  height: 2rem;
+  height: 2.5rem;
 }
 
 .icon-svg.youtube {
-  height: 1.6rem;
+  height: 2rem;
 }
 
 .icon-svg.twitch {
-  height: 2.4rem;
+  height: 3rem;
 }
 
 .icon-svg.tiktok {
-  height: 2.4rem;
+  height: 3rem;
 }
 
 /* hover */
@@ -418,7 +418,7 @@ header {
 .other {
   font-size: 1.2rem;
   line-height: 1.5;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   word-break: break-word;
   overflow-wrap: anywhere;
   transition: transform 0.2s ease;
