@@ -372,7 +372,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5%;
-  margin: 6px 0px 6px -0.5rem;
+  margin-left: -0.5rem;
 }
 
 .role {
@@ -425,7 +425,6 @@ header {
 /* その他URL */
 .other {
   font-size: 1.2rem;
-  line-height: 1.5;
   word-break: break-word;
   overflow-wrap: anywhere;
   transition: transform 0.2s ease;
