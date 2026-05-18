@@ -358,7 +358,7 @@ header {
   margin: 6px 0;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .roles {
@@ -418,8 +418,8 @@ header {
 /* その他URL */
 .other {
   font-size: 1.2rem;
-  line-height: 1.5;
-  margin-bottom: 8px;
+  line-height: 1.25;
+  margin-bottom: 10px;
   word-break: break-word;
   overflow-wrap: anywhere;
   transition: transform 0.2s ease;
