@@ -357,7 +357,7 @@ header {
 }
 
 .links {
-  margin: 6px 0 8px;
+  margin: 6px 0;
   display: flex;
   align-items: center;
   gap: 2%;
@@ -367,7 +367,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5%;
-  margin-left: -0.5rem;
+  margin: 6px 0px 6px -0.5rem;
 }
 
 .role {
@@ -419,8 +419,8 @@ header {
 
 /* その他URL */
 .other {
-  margin: 0px 0px 14px 0px;
   font-size: 1.2rem;
+  line-height: 1.5;
   word-break: break-word;
   overflow-wrap: anywhere;
   transition: transform 0.2s ease;
