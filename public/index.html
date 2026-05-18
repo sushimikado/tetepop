@@ -3,22 +3,144 @@
     
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="配信者向けのゲーム鯖や各種イベントの企画・運営を行っている「ててぽっぷ」の公式サイトです。" />
+    
+    <title>ててぽっぷ│配信者向けイベント企画</title>
+    
+    <link rel="icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" href="webclip.png" />
     <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&family=Righteous&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header><h1>Notion Managed Site</h1></header>
+    <div class="container-body">
 
-<main>
-    <div id="ABOUT" class="notion-placeholder"></div>
+        <!-- ======== ヘッダー ======== -->
+        <header>
+            <div class="header__mark">
+                <a href="#">
+                    <img src="img/tetepop_mark.png" class="nav__mark--img" alt="ててぽっぷマーク" style="height: 6rem; width: auto;">
+                </a>
+            </div>
+            <nav class="nav">
+                <div class="nav__top">
+                    <div class="nav__mark">
+                        <a href="#">
+                            <img src="img/tetepop_mark.png" class="nav__mark--img" alt="ててぽっぷマーク">
+                        </a>
+                    </div>
+                    <div class="nav__btn">
+                        <img src="img/btn_close.svg" class="nav__btn--close" alt="とじるボタン">
+                    </div>
+                </div>
+                <div class="nav__list">
+                    <a href="#ABOUT" class="nav__title" data-cms-nav="ABOUT"></a>
+                    <a href="#NEWS" class="nav__title" data-cms-nav="NEWS"></a>
+                    <a href="#STREAM" class="nav__title" data-cms-nav="STREAM"></a>
+                    <a href="#MEMBERS" class="nav__title" data-cms-nav="MEMBERS"></a>
+                </div>
+            </nav>
+            <div class="header__btn">
+                <img src="img/btn_hamburger.svg" class="nav__btn--menu" alt="メニューボタン">
+            </div>
+        </header>
 
-    <div id="MEMBERS" class="notion-placeholder"></div>
-    <div id="MEMBER-LIST" class="grid"></div>
+        <!-- ======== メイン ======== -->
+        <main>
+            <div class="main-img">
+                <img src="img/tetepop_logo.png" alt="ててぽっぷロゴ" style="width: 100%";>
+            </div>
+            <div class="main-copy">
+                <h3>なんか良い感じのキャッチコピー</h3>
+            </div>
+ 
+            <article class="main-article">
+                <!-- ======== ABOUT ======== -->
+                <div class="about-and-news">
 
+                    <section id="ABOUT" class="section-container">
+                        <div class="section-top">
+                            <img src="img/tetepop_character.png" style="height: 7.2rem; width: auto;">
+                            <h2 class="item-title" data-cms-title="ABOUT"></h2>
+                        </div>
+                        <div class="section-bottom">
+                            <div class="titleJa">
+                                <h3 class="item-titleJa" data-cms-titleJa="ABOUT"></h3>
+                            </div>
+                            <div class="item-body">
+                                <p class="about__text" data-cms-text="ABOUT"></p>
+                                <hr class="tag-divider">
+                                <p class="tag__text" data-cms-text="TAG"></p>
+                            </div>
+                        </div>
+                    </section>
 
-</main>
+                    <!-- ======== NEWS ======== -->
+                    <section id="NEWS" class="section-container">
+                        <div class="section-top">
+                            <img src="img/tetepop_character.png" style="height: 7.2rem; width: auto;">
+                            <h2 class="item-title" data-cms-title="NEWS"></h2>
+                        </div>
+                        <div class="section-bottom">
+                            <div class="titleJa">
+                                <h3 class="item-titleJa" data-cms-titleJa="NEWS"></h3>
+                            </div>
+                            <div class="item-body">
+                                <p class="news__text" data-cms-text="NEWS"></p>
+                                <div class="news__x-embed" data-cms-url="NEWS"></div>
+                            </div>
+                        </div>
+                    </section>
 
+                </div>
+                
+                <!-- ======== STREAM ======== -->
+                <section id="STREAM" class="section-container">
+                    <div class="section-top">
+                        <img src="img/tetepop_character.png" style="height: 7.2rem; width: auto;">
+                        <h2 class="item-title" data-cms-title="STREAM"></h2>
+                    </div>
+                    <div class="section-bottom">
+                        <div class="titleJa">
+                            <h3 class="item-titleJa" data-cms-titleJa="STREAM"></h3>
+                        </div>
+                        <div class="item-body">
+                            <p class="stream__text" data-cms-text="STREAM"></p>
+                            <div id="STREAM-LIST" class="grid"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======== MEMBERS ======== -->
+                <section id="MEMBERS" class="section-container">
+                    <div class="section-top">
+                        <img src="img/tetepop_character.png" style="height: 7.2rem; width: auto;">
+                        <h2 class="item-title" data-cms-title="MEMBERS"></h2>
+                    </div>
+                    <div class="section-bottom">
+                        <div class="titleJa">
+                            <h3 class="item-titleJa" data-cms-titleJa="MEMBERS"></h3>
+                        </div>
+                        <div class="item-body">
+                            <p class="members__text" data-cms-text="MEMBERS"></p>
+                            <div id="MEMBER-LIST" class="grid"></div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+
+        </main>
+
+    </div>
+
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="js/main.js"></script>
 </body>
-
 </html>
