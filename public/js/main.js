@@ -15,11 +15,12 @@ function renderRichText(richTextArray) {
     }).join('');
 }
 
+// notionCMSを取ってくる
 async function loadNotionCMS() {
     try {
         // main.js の一時的な書き換え
-        // const response = await fetch('/test-data.json'); // ローカルのファイルを見る
-        const response = await fetch('/api/contents');
+        const response = await fetch('/test-data.json'); // ローカルのファイルを見る
+        /* const response = await fetch('/api/contents'); ←あとで書き換える*/
         const contents = await response.json();
 
         contents.forEach(item => {
@@ -83,6 +84,30 @@ async function loadNotionCMS() {
             const memRes = await fetch('/api/members');
             const memHtml = await memRes.text();
             memberArea.innerHTML = memHtml;
+        }
+
+        // 3. 配信情報の取得
+        const liveArea = document.getElementById('STREAM-LIST'); // HTML側にこのIDのタグが必要
+        if (liveArea) {
+            try {
+                const liveRes = await fetch('/api/stream');
+                const lives = await liveRes.json();
+
+                if (lives.length > 0) {
+                    liveArea.innerHTML = lives.map(v => `
+                        <div class="card">
+                            <a href="${v.url}" target="_blank">
+                                <img src="${v.thumbnail}" style="width:100%">
+                                <p>${v.title}</p>
+                            </a>
+                        </div>
+                    `).join('');
+                } else {
+                    liveArea.innerHTML = '<p>現在配信中のメンバーはいません</p>';
+                }
+            } catch (e) {
+                console.error("ライブ情報の取得に失敗しました", e);
+            }
         }
 
     } catch (error) {
