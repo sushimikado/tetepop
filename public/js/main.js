@@ -96,7 +96,7 @@ loadNotionCMS();
 
 // 配信スケジュール
 async function loadStreamChecker() {
-  const el = document.getElementById("stream-checker");
+  const el = document.getElementById("STREAM-LIST");
 
   if (!el) return;
 
