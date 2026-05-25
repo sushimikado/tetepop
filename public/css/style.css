@@ -458,18 +458,15 @@ header {
 }
 
 .status {
-    font-weight: bold;
-    font-size: 0.8rem;
+    font-size: 1.2rem;
     margin-bottom: 5px;
 }
-.status:contains("配信中") { color: #ff0000; }
-.status:contains("配信終了") { color: #888; }
-.status:contains("配信予定") { color: #007bff; }
+.status:contains("配信中") { background: var(--color-3); }
+.status:contains("配信終了") { background: var(--color-4); }
+.status:contains("配信予定") { background: var(--color-5); }
 
 .title {
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.6;
+  font-size: 1.2rem;
   width: 100%;
   
   display: -webkit-box;
