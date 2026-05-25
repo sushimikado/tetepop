@@ -139,7 +139,6 @@ export default async function handler(req, res) {
     const html =
       streams.length === 0
         ? `
-<div class="grid">
   <div class="card">
     <div class="thumb-empty">
       STANDBY
@@ -153,7 +152,6 @@ export default async function handler(req, res) {
       </div>
     </div>
   </div>
-</div>
 `
         : `
 <div class="grid">
