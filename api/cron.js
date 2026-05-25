@@ -2,9 +2,9 @@ import { createClient } from '@vercel/kv';
 
 export default async function handler(req, res) {
   // セキュリティチェック（まずはテストのため、このif文を一時的にコメントアウトしてもOKです）
-  if (req.headers['authorization'] !== `Bearer ${process.env.CRON_SECRET}`) {
-    return res.status(401).end('Unauthorized');
-  }
+  // if (req.headers['authorization'] !== `Bearer ${process.env.CRON_SECRET}`) {
+  //   return res.status(401).end('Unauthorized');
+  // }
 
   const kv = createClient({
     url: process.env.KV_REST_API_URL,
