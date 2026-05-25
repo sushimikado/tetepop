@@ -5,7 +5,7 @@ export default async function handler(req, res) {
       process.env.NOTION_MEMBERS_DATABASE_ID;
 
     // 検索したいタグ
-    const KEYWORD = "#ててぽぷ";
+    // const KEYWORD = "#ててぽぷ";
 
     function escapeHtml(str) {
       if (!str) return "";
@@ -84,7 +84,7 @@ export default async function handler(req, res) {
             const title = titleMatch?.[1]?.trim() || "";
 
             // キーワード判定
-            if (!title.includes(KEYWORD)) continue;
+            // if (!title.includes(KEYWORD)) continue;
 
             // 動画ID
             const videoIdMatch = entry.match(
