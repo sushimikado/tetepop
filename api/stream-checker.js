@@ -16,12 +16,12 @@ export default async function handler(req, res) {
         .replace(/"/g, "&quot;");
     }
     
-    function formatScheduleTime(unixTime) {
+    function formatScheduleTime(dateString) {
     
-      if (!unixTime) return "";
+      if (!dateString) return "";
     
       const date =
-        new Date(Number(unixTime) * 1000);
+        new Date(dateString);
     
       return date.toLocaleString("ja-JP", {
         timeZone: "Asia/Tokyo",
@@ -158,21 +158,21 @@ export default async function handler(req, res) {
               // 実際の開始時刻
               const actualMatch =
                 watchHtml.match(
-                  /"actualStartTime":"(\d+)"/
+                  /"actualStartTime":"(.*?)"/
                 );
-            
+              
               // 予定開始時刻
               const scheduledMatch =
                 watchHtml.match(
-                  /"scheduledStartTime":"(\d+)"/
+                  /"scheduledStartTime":"(.*?)"/
                 );
-            
+              
               // actual を優先
               startTime =
                 actualMatch?.[1]
                 || scheduledMatch?.[1]
                 || "";
-            
+              
             } catch (e) {
             
               console.error(
@@ -203,11 +203,11 @@ export default async function handler(req, res) {
     allStreams.sort((a, b) => {
     
       const aTime =
-        Number(a.startTime || 0);
-    
+        new Date(a.startTime).getTime();
+      
       const bTime =
-        Number(b.startTime || 0);
-    
+        new Date(b.startTime).getTime();
+      
       return aTime - bTime;
     
     });
