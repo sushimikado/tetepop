@@ -267,7 +267,7 @@ ${streams.map(v => `
       </div>
       
       <div class="stream-date">
-        ${formatScheduleTime(v.scheduledStartTime)}
+        ${formatScheduleTime(v.startTime)}
       </div>
 
     </div>
