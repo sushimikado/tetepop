@@ -62,9 +62,11 @@ export default async function handler(req, res) {
           // 【追加】状況判定ロジック
           const start = Number(v.startTime);
           let statusText = "配信予定";
+          let statusClass = "status-futurePlan"; // クラス名を生成
+
           if (start < now) {
-            // 配信開始時刻から例えば2時間経っていれば「終了」とみなす（目安）
             statusText = (now - start) > 7200 ? "配信終了" : "配信中";
+            statusClass = (now - start) > 7200 ? "status-ended" : "status-now";
           }
           
           return `
@@ -72,7 +74,7 @@ export default async function handler(req, res) {
               <div class="card">
                 <img class="thumb" src="${v.thumbnail}">
                 <div class="card-bottom">
-                  <div class="status">${statusText}</div>
+                  <div class="status ${statusClass}">${statusText}</div>
                   <div class="title">${v.title.replace(/</g, "&lt;")}</div>
                   <div class="name">${v.memberName}</div>
                   <div class="stream-date">${new Date(start * 1000).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</div>
