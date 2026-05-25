@@ -430,11 +430,12 @@ header {
   text-decoration: none;
   color: inherit;
   display: flex;
+  transition: transform 0.2s;
 }
 
 .card-link:hover .card {
   transform: translateY(-3px);
-  box-shadow: 4px 6px 16px rgba(0,0,0,0.12);
+  box-shadow: 4px 6px 16px rgba(0,0,0,0.11);
 }
 
 .thumb {
