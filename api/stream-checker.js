@@ -1,26 +1,52 @@
 export default async function handler(req, res) {
   try {
-
-    const NOTION_TOKEN =
-      process.env.NOTION_TOKEN;
-
+    const NOTION_TOKEN = process.env.NOTION_TOKEN;
     const NOTION_MEMBERS_DATABASE_ID =
       process.env.NOTION_MEMBERS_DATABASE_ID;
 
+    // 検索したいタグ
+    // const KEYWORD = "#ててぽぷ";
+
     function escapeHtml(str) {
       if (!str) return "";
-
       return str
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
     }
+    
+    function formatScheduleTime(unixTime) {
+    
+      if (!unixTime) return "";
+    
+      const date =
+        new Date(Number(unixTime) * 1000);
+    
+      return date.toLocaleString("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return "";
+      const date = new Date(dateString);    
+      return date.toLocaleString("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
     // =========================
     // Notion取得
     // =========================
-
     const notionRes = await fetch(
       `https://api.notion.com/v1/databases/${NOTION_MEMBERS_DATABASE_ID}/query`,
       {
@@ -33,295 +59,191 @@ export default async function handler(req, res) {
       }
     );
 
-    const notionData =
-      await notionRes.json();
+    const notionData = await notionRes.json();
 
     // =========================
-    // チャンネル一覧
+    // チャンネルID一覧
     // =========================
+    const channels = notionData.results
+      .map(page => {
+        const p = page.properties;
 
-    const channels =
-      notionData.results
-        .map(page => {
+        const name =
+          (p["名前"]?.title || [])
+            .map(t => t.plain_text || "")
+            .join("")
+            .trim();
 
-          const p =
-            page.properties;
+        const channelId =
+          p["YouTubeChannelID"]?.rich_text?.[0]?.plain_text || "";
 
-          const name =
-            (p["名前"]?.title || [])
-              .map(t => t.plain_text || "")
-              .join("")
-              .trim();
-
-          const channelId =
-            p["YouTubeChannelID"]
-              ?.rich_text?.[0]
-              ?.plain_text || "";
-
-          return {
-            name,
-            channelId
-          };
-        })
-        .filter(v => v.channelId);
+        return {
+          name,
+          channelId
+        };
+      })
+      .filter(v => v.channelId);
 
     // =========================
     // RSS取得
     // =========================
-
     const allStreams = [];
 
     await Promise.all(
-
       channels.map(async member => {
-
         try {
-
           const rssUrl =
             `https://www.youtube.com/feeds/videos.xml?channel_id=${member.channelId}`;
 
-          const rssRes =
-            await fetch(rssUrl);
+          const rssRes = await fetch(rssUrl, {
+            headers: {
+              "User-Agent": "Mozilla/5.0"
+            }
+          });
 
-          const xml =
-            await rssRes.text();
+          const xml = await rssRes.text();
 
-          const entries =
-            xml.split("<entry>");
+          // entryごとに分割
+          const entries = xml.split("<entry>");
 
           for (const entry of entries) {
+            // タイトル
+            const titleMatch = entry.match(/<title>(.*?)<\/title>/s);
+            const title = titleMatch?.[1]?.trim() || "";
 
-            const titleMatch =
-              entry.match(
-                /<title>(.*?)<\/title>/s
-              );
+            // キーワード判定
+            // if (!title.includes(KEYWORD)) continue;
 
-            const title =
-              titleMatch?.[1]?.trim() || "";
+            // 動画ID
+            const videoIdMatch = entry.match(
+              /<yt:videoId>(.*?)<\/yt:videoId>/
+            );
 
-            const videoIdMatch =
-              entry.match(
-                /<yt:videoId>(.*?)<\/yt:videoId>/
-              );
-
-            const videoId =
-              videoIdMatch?.[1]?.trim();
+            const videoId = videoIdMatch?.[1]?.trim();
 
             if (!videoId) continue;
 
+            // サムネ
+            const thumbnail =
+              `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+            
+            // 公開日時
+            const publishedMatch = entry.match(
+              /<published>(.*?)<\/published>/
+            );
+            
+            const published =
+              publishedMatch?.[1] || "";
+            
             // =========================
-            // 動画ページ取得
+            // 配信ページ取得
             // =========================
-
-            let startTime = null;
-
+            
+            let startTime = "";
+            
             try {
-
-              const watchRes =
-                await fetch(
-                  `https://www.youtube.com/watch?v=${videoId}`,
-                  {
-                    headers: {
-                      "User-Agent":
-                        "Mozilla/5.0"
-                    }
-                  }
-                );
-
+            
+              const watchUrl =
+                `https://www.youtube.com/watch?v=${videoId}`;
+            
+              const watchRes = await fetch(watchUrl, {
+                headers: {
+                  "User-Agent": "Mozilla/5.0"
+                }
+              });
+            
               const watchHtml =
                 await watchRes.text();
-
-              // scheduledStartTime
-              const scheduledMatch =
-                watchHtml.match(
-                  /"scheduledStartTime":"(\d+)"/
-                );
-
-              // actualStartTime
+            
+              // 実際の開始時刻
               const actualMatch =
                 watchHtml.match(
                   /"actualStartTime":"(\d+)"/
                 );
-
-              const unix =
-                scheduledMatch?.[1]
-                || actualMatch?.[1];
-
-              if (unix) {
-                startTime =
-                  new Date(
-                    Number(unix) * 1000
-                  );
-              }
-
+            
+              // 予定開始時刻
+              const scheduledMatch =
+                watchHtml.match(
+                  /"scheduledStartTime":"(\d+)"/
+                );
+            
+              // actual を優先
+              startTime =
+                actualMatch?.[1]
+                || scheduledMatch?.[1]
+                || "";
+            
             } catch (e) {
+            
               console.error(
-                "watch fetch error",
-                videoId
+                "startTime error:",
+                videoId,
+                e
               );
             }
-
-            if (!startTime) continue;
-
-            // =========================
-            // おととい以前除外
-            // =========================
-
-            const now =
-              new Date();
-
-            const border =
-              new Date();
-
-            border.setDate(
-              border.getDate() - 2
-            );
-
-            if (startTime < border) {
-              continue;
-            }
-
+            
             allStreams.push({
-
-              memberName:
-                member.name,
-
+              memberName: member.name,
               title,
-
               videoId,
-
-              thumbnail:
-                `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
-
+              thumbnail,
+              published,
               startTime
             });
           }
-
         } catch (err) {
-
-          console.error(
-            "RSS error:",
-            member.channelId,
-            err
-          );
+          console.error("RSS error:", member.channelId, err);
         }
       })
     );
 
     // =========================
-    // 開始時刻順
+    // 新しい順
     // =========================
-
     allStreams.sort((a, b) => {
-      return a.startTime - b.startTime;
+    
+      const aTime =
+        Number(a.startTime || 0);
+    
+      const bTime =
+        Number(b.startTime || 0);
+    
+      return aTime - bTime;
+    
     });
 
     // =========================
-    // 日付グループ
+    // 最大30件
     // =========================
+    const streams = allStreams.slice(0, 30);
 
-    const yesterday = [];
-    const today = [];
-    const tomorrow = [];
+// =========================
+// HTML生成
+// =========================
+const html =
+  streams.length === 0
+    ? `
+<div class="card">
+  <div class="thumb-empty">
+    STANDBY
+  </div>
 
-    const now =
-      new Date();
+  <div class="card-bottom">
+    <span class="live-badge-empty">● INFO</span>
 
-    function dateKey(d) {
-      return (
-        d.getFullYear() +
-        "-" +
-        (d.getMonth() + 1) +
-        "-" +
-        d.getDate()
-      );
-    }
-
-    const todayKey =
-      dateKey(now);
-
-    const y =
-      new Date();
-
-    y.setDate(
-      y.getDate() - 1
-    );
-
-    const yesterdayKey =
-      dateKey(y);
-
-    const t =
-      new Date();
-
-    t.setDate(
-      t.getDate() + 1
-    );
-
-    const tomorrowKey =
-      dateKey(t);
-
-    for (const stream of allStreams) {
-
-      const key =
-        dateKey(stream.startTime);
-
-      if (key === yesterdayKey) {
-        yesterday.push(stream);
-      }
-
-      else if (key === todayKey) {
-        today.push(stream);
-      }
-
-      else if (key === tomorrowKey) {
-        tomorrow.push(stream);
-      }
-    }
-
-    // =========================
-    // カード生成
-    // =========================
-
-    function renderGroup(
-      label,
-      items
-    ) {
-
-      if (items.length === 0) {
-        return "";
-      }
-
-      return `
-
-<div class="schedule-group">
-
-  <h3 class="schedule-title">
-    ${label}
-  </h3>
-
-  ${items.map(v => {
-
-    const d =
-      v.startTime;
-
-    const hh =
-      String(
-        d.getHours()
-      ).padStart(2, "0");
-
-    const mm =
-      String(
-        d.getMinutes()
-      ).padStart(2, "0");
-
-    return `
-
+    <div class="title">
+      条件に一致する配信枠が見つかりません
+    </div>
+  </div>
+</div>
+`
+    : `
+${streams.map(v => `
 <a
   href="https://www.youtube.com/watch?v=${v.videoId}"
   target="_blank"
   class="card-link"
 >
-
   <div class="card">
 
     <img
@@ -333,57 +255,55 @@ export default async function handler(req, res) {
     <div class="card-bottom">
 
       <span class="live-badge">
-        ${hh}:${mm}
+        ● YouTube
       </span>
 
       <div class="title">
         ${escapeHtml(v.title)}
       </div>
 
-      <div class="yomi">
+      <div class="name">
         ${escapeHtml(v.memberName)}
+      </div>
+      
+      <div class="stream-date">
+        ${formatScheduleTime(v.scheduledStartTime)}
       </div>
 
     </div>
   </div>
 </a>
-`;
-  }).join("")}
-
-</div>
-`;
-    }
-
-    const html = `
-${renderGroup("昨日", yesterday)}
-${renderGroup("今日", today)}
-${renderGroup("明日", tomorrow)}
+`).join("")}
 `;
 
     // =========================
     // キャッシュ
     // =========================
-
     res.setHeader(
       "Cache-Control",
       "public, s-maxage=900, stale-while-revalidate=59"
     );
 
-    res.setHeader(
-      "Content-Type",
-      "text/html"
-    );
-
+    res.setHeader("Content-Type", "text/html");
     res.status(200).send(html);
 
   } catch (e) {
-
     console.error(e);
 
     res.status(500).send(`
-<div class="card">
-  ERROR
-</div>
+  <div class="card">
+    <div class="thumb-empty">
+      ERROR
+    </div>
+
+    <div class="card-bottom">
+      <span class="live-badge-empty">● ERROR</span>
+
+      <div class="title">
+        stream-checker.js の実行に失敗しました
+      </div>
+    </div>
+  </div>
 `);
   }
 }
