@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   try {
     // NotionからチャンネルIDリストを取得
     const response = await notion.databases.query({ database_id: process.env.NOTION_DATABASE_ID });
-    // ※ Notionのプロパティ名は適宜調整してください
+    // Notionのプロパティ名
     const channelIds = response.results.map(page => page.properties.YouTubeChannelID.rich_text[0].plain_text);
 
     const results = [];
