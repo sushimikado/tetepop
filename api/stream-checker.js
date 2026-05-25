@@ -200,17 +200,11 @@ export default async function handler(req, res) {
     // =========================
     // 新しい順
     // =========================
-    allStreams.sort((a, b) => {
-    
-      const aTime =
-        new Date(a.startTime).getTime();
-      
-      const bTime =
-        new Date(b.startTime).getTime();
-      
-      return aTime - bTime;
-    
-    });
+allStreams.sort((a, b) => {
+  const aTime = Number(a.startTime) || 0;
+  const bTime = Number(b.startTime) || 0;
+  return aTime - bTime; // 昇順（時間が早い順）
+});
 
     // =========================
     // 最大30件
