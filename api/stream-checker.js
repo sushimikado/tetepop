@@ -284,9 +284,15 @@ ${streams.map(v => `
     // =========================
     // キャッシュ
     // =========================
+    // res.setHeader(
+    //   "Cache-Control",
+    //   "public, s-maxage=900, stale-while-revalidate=59"
+    // );
+
+    // 【テスト用】キャッシュを無効化する
     res.setHeader(
-      "Cache-Control",
-      "public, s-maxage=900, stale-while-revalidate=59"
+      "Cache-Control", 
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
     );
 
     res.setHeader("Content-Type", "text/html");
