@@ -1,15 +1,14 @@
-import { XMLParser } from "fast-xml-parser";
-
 export default async function handler(req, res) {
   try {
     const NOTION_TOKEN = process.env.NOTION_TOKEN;
-    const DATABASE_ID = process.env.NOTION_MEMBERS_DATABASE_ID;
+    const NOTION_MEMBERS_DATABASE_ID =
+      process.env.NOTION_MEMBERS_DATABASE_ID;
 
-    const HASHTAG = "#ててぽぷ";
+    // 検索したいタグ
+    const KEYWORD = "#ててぽぷ";
 
     function escapeHtml(str) {
       if (!str) return "";
-
       return str
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -20,12 +19,10 @@ export default async function handler(req, res) {
     // =========================
     // Notion取得
     // =========================
-
     const notionRes = await fetch(
-      `https://api.notion.com/v1/databases/${DATABASE_ID}/query`,
+      `https://api.notion.com/v1/databases/${NOTION_MEMBERS_DATABASE_ID}/query`,
       {
         method: "POST",
-        cache: "no-store",
         headers: {
           Authorization: `Bearer ${NOTION_TOKEN}`,
           "Content-Type": "application/json",
@@ -36,297 +33,195 @@ export default async function handler(req, res) {
 
     const notionData = await notionRes.json();
 
-    const channelIds = notionData.results
+    // =========================
+    // チャンネルID一覧
+    // =========================
+    const channels = notionData.results
       .map(page => {
-        const prop = page.properties["YouTubeChannelID"];
+        const p = page.properties;
 
-        if (!prop?.rich_text?.length) return null;
+        const name =
+          (p["名前"]?.title || [])
+            .map(t => t.plain_text || "")
+            .join("")
+            .trim();
 
-        return prop.rich_text[0].plain_text.trim();
+        const channelId =
+          p["YouTubeChannelID"]?.rich_text?.[0]?.plain_text || "";
+
+        return {
+          name,
+          channelId
+        };
       })
-      .filter(id => id && id.startsWith("UC"));
+      .filter(v => v.channelId);
 
     // =========================
     // RSS取得
     // =========================
-
-    const parser = new XMLParser({
-      ignoreAttributes: false
-    });
-
-    const allVideos = [];
+    const allStreams = [];
 
     await Promise.all(
-      channelIds.map(async channelId => {
+      channels.map(async member => {
         try {
           const rssUrl =
-            `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+            `https://www.youtube.com/feeds/videos.xml?channel_id=${member.channelId}`;
 
-          const rssText = await fetch(rssUrl, {
-            cache: "no-store"
-          }).then(r => r.text());
+          const rssRes = await fetch(rssUrl, {
+            headers: {
+              "User-Agent": "Mozilla/5.0"
+            }
+          });
 
-          const rss = parser.parse(rssText);
+          const xml = await rssRes.text();
 
-          const entries = rss.feed?.entry || [];
+          // entryごとに分割
+          const entries = xml.split("<entry>");
 
-          const arrayEntries = Array.isArray(entries)
-            ? entries
-            : [entries];
+          for (const entry of entries) {
+            // タイトル
+            const titleMatch = entry.match(/<title>(.*?)<\/title>/s);
+            const title = titleMatch?.[1]?.trim() || "";
 
-          for (const entry of arrayEntries) {
-            const title = entry.title || "";
+            // キーワード判定
+            if (!title.includes(KEYWORD)) continue;
 
-            // ハッシュタグ判定
-            if (!title.includes(HASHTAG)) continue;
+            // 動画ID
+            const videoIdMatch = entry.match(
+              /<yt:videoId>(.*?)<\/yt:videoId>/
+            );
 
-            const videoId =
-              entry["yt:videoId"];
+            const videoId = videoIdMatch?.[1]?.trim();
+
+            if (!videoId) continue;
+
+            // サムネ
+            const thumbnail =
+              `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+
+            // 公開日時
+            const publishedMatch = entry.match(
+              /<published>(.*?)<\/published>/
+            );
 
             const published =
-              entry.published || "";
+              publishedMatch?.[1] || "";
 
-            const author =
-              entry.author?.name || "";
-
-            allVideos.push({
+            allStreams.push({
+              memberName: member.name,
               title,
               videoId,
-              published,
-              author,
-              url: `https://www.youtube.com/watch?v=${videoId}`,
-              thumbnail:
-                `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+              thumbnail,
+              published
             });
           }
-        } catch (e) {
-          console.error("RSS ERROR:", channelId, e);
+        } catch (err) {
+          console.error("RSS error:", member.channelId, err);
         }
       })
     );
 
     // =========================
-    // 日時順ソート
+    // 新しい順
     // =========================
-
-    allVideos.sort((a, b) => {
-      return new Date(a.published) - new Date(b.published);
+    allStreams.sort((a, b) => {
+      return new Date(b.published) - new Date(a.published);
     });
 
-    // 重複除去
-    const uniqueVideos = Array.from(
-      new Map(
-        allVideos.map(v => [v.videoId, v])
-      ).values()
-    );
+    // =========================
+    // 最大30件
+    // =========================
+    const streams = allStreams.slice(0, 30);
 
     // =========================
-    // HTML
+    // HTML生成
     // =========================
-
-    const html = `
-<html>
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<style>
-
-:root {
-  --text-color-1: #523f31;
-  --text-color-2: #755a46;
-}
-
-body {
-  margin: 0;
-  padding: 16px;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-  background: transparent;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow:
-    2px 2px 8px rgba(0,0,0,0.08);
-  transition:
-    transform 0.15s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    4px 6px 16px rgba(0,0,0,0.12);
-}
-
-.card-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-.thumb {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  display: block;
-}
-
-.card-bottom {
-  padding: 12px 16px 16px;
-}
-
-.badge {
-  display: inline-block;
-  background: #ff3b30;
-  color: white;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.title {
-  font-size: 13px;
-  line-height: 1.6;
-  font-weight: 600;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-
-  overflow: hidden;
-}
-
-.author {
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--text-color-2);
-}
-
-.date {
-  margin-top: 4px;
-  font-size: 11px;
-  color: #888;
-}
-
-.empty-card {
-  background: white;
-  border-radius: 8px;
-  padding: 24px;
-  text-align: center;
-  box-shadow:
-    2px 2px 8px rgba(0,0,0,0.08);
-}
-
-</style>
-</head>
-
-<body>
-
-${
-  uniqueVideos.length === 0
-    ? `
-<div class="empty-card">
-  現在予定されている配信はありません
-</div>
-`
-    : `
+    const html =
+      streams.length === 0
+        ? `
 <div class="grid">
+  <div class="card">
+    <div class="thumb-empty">
+      STANDBY
+    </div>
 
-${uniqueVideos.map(v => {
+    <div class="card-bottom">
+      <span class="live-badge-empty">● INFO</span>
 
-  const date = new Date(v.published);
-
-  const jpDate =
-    date.toLocaleString("ja-JP", {
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
-  return `
-<a
-  class="card-link"
-  href="${v.url}"
-  target="_blank"
->
-
-<div class="card">
-
-<img
-  class="thumb"
-  src="${v.thumbnail}"
->
-
-<div class="card-bottom">
-
-<div class="badge">
-  YouTube
-</div>
-
-<div class="title">
-  ${escapeHtml(v.title)}
-</div>
-
-<div class="author">
-  ${escapeHtml(v.author)}
-</div>
-
-<div class="date">
-  ${jpDate}
-</div>
-
-</div>
-</div>
-</a>
-`;
-
-}).join("")}
-
+      <div class="title">
+        条件に一致する配信枠が見つかりません
+      </div>
+    </div>
+  </div>
 </div>
 `
-}
+        : `
+<div class="grid">
+${streams.map(v => `
+  <a
+    href="https://www.youtube.com/watch?v=${v.videoId}"
+    target="_blank"
+    class="card-link"
+  >
+    <div class="card">
 
-</body>
-</html>
+      <img
+        class="thumb"
+        src="${v.thumbnail}"
+        alt="${escapeHtml(v.title)}"
+      >
+
+      <div class="card-bottom">
+
+        <span class="live-badge">
+          ● YouTube
+        </span>
+
+        <div class="title">
+          ${escapeHtml(v.title)}
+        </div>
+
+        <div class="yomi">
+          ${escapeHtml(v.memberName)}
+        </div>
+
+      </div>
+    </div>
+  </a>
+`).join("")}
+</div>
 `;
 
     // =========================
-    // Cache
+    // キャッシュ
     // =========================
-
     res.setHeader(
       "Cache-Control",
-      "s-maxage=900, stale-while-revalidate=300"
+      "public, s-maxage=900, stale-while-revalidate=59"
     );
 
-    res.setHeader(
-      "Content-Type",
-      "text/html; charset=utf-8"
-    );
-
+    res.setHeader("Content-Type", "text/html");
     res.status(200).send(html);
 
   } catch (e) {
     console.error(e);
 
     res.status(500).send(`
-      <pre>${e.message}</pre>
-    `);
+<div class="grid">
+  <div class="card">
+    <div class="thumb-empty">
+      ERROR
+    </div>
+
+    <div class="card-bottom">
+      <span class="live-badge-empty">● ERROR</span>
+
+      <div class="title">
+        stream-checker.js の実行に失敗しました
+      </div>
+    </div>
+  </div>
+</div>
+`);
   }
 }
