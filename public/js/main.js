@@ -86,30 +86,6 @@ async function loadNotionCMS() {
             memberArea.innerHTML = memHtml;
         }
 
-        // 3. 配信情報の取得
-        const liveArea = document.getElementById('STREAM-LIST'); // HTML側にこのIDのタグが必要
-        if (liveArea) {
-            try {
-                const liveRes = await fetch('/api/stream');
-                const lives = await liveRes.json();
-
-                if (lives.length > 0) {
-                    liveArea.innerHTML = lives.map(v => `
-                        <div class="card">
-                            <a href="${v.url}" target="_blank">
-                                <img src="${v.thumbnail}" style="width:100%">
-                                <p>${v.title}</p>
-                            </a>
-                        </div>
-                    `).join('');
-                } else {
-                    liveArea.innerHTML = '<p>現在配信中のメンバーはいません</p>';
-                }
-            } catch (e) {
-                console.error("ライブ情報の取得に失敗しました", e);
-            }
-        }
-
     } catch (error) {
         console.error("読み込みエラー:", error);
     }
@@ -117,6 +93,40 @@ async function loadNotionCMS() {
 }
 
 loadNotionCMS();
+
+// 配信スケジュール
+async function loadStreamChecker() {
+  const el = document.getElementById("stream-checker");
+
+  if (!el) return;
+
+  try {
+    const res = await fetch("/api/stream-checker");
+    const html = await res.text();
+
+    el.innerHTML = html;
+  } catch (e) {
+    el.innerHTML = `
+      <div class="grid">
+        <div class="card">
+          <div class="thumb-empty">
+            ERROR
+          </div>
+
+          <div class="card-bottom">
+            <span class="live-badge-empty">● ERROR</span>
+
+            <div class="title">
+              配信情報の取得に失敗しました
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+loadStreamChecker();
 
 // ヘッダーの動き
 'use strict';
