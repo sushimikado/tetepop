@@ -1,10 +1,10 @@
 import { createClient } from '@vercel/kv';
 
 export default async function handler(req, res) {
-  // セキュリティチェック（まずはテストのため、このif文を一時的にコメントアウトしてもOKです）
-  // if (req.headers['authorization'] !== `Bearer ${process.env.CRON_SECRET}`) {
-  //   return res.status(401).end('Unauthorized');
-  // }
+  // セキュリティチェック
+  if (req.headers['authorization'] !== `Bearer ${process.env.CRON_SECRET}`) {
+    return res.status(401).end('Unauthorized');
+  }
 
   const kv = createClient({
     url: process.env.KV_REST_API_URL,
@@ -12,9 +12,10 @@ export default async function handler(req, res) {
   });
 
   try {
-    // 【修正】まずはテストのために、空の配列ではなく、実際のチャンネルIDを1つ入れてみてください
-    // Notion取得ロジックを入れる前のテスト用
-    const channelIds = ['UCbfFwk8Qfr1R2xjjEHbIWgw']; 
+    // NotionからチャンネルIDリストを取得
+    const response = await notion.databases.query({ database_id: process.env.NOTION_DATABASE_ID });
+    // ※ Notionのプロパティ名は適宜調整してください
+    const channelIds = response.results.map(page => page.properties.YouTubeChannelID.rich_text[0].plain_text);
 
     const results = [];
     for (const channelId of channelIds) {
