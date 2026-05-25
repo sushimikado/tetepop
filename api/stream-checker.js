@@ -15,6 +15,22 @@ export default async function handler(req, res) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
     }
+    
+    function formatScheduleTime(unixTime) {
+    
+      if (!unixTime) return "";
+    
+      const date =
+        new Date(Number(unixTime) * 1000);
+    
+      return date.toLocaleString("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
     function formatDate(dateString) {
       if (!dateString) return "";
@@ -110,21 +126,62 @@ export default async function handler(req, res) {
             // サムネ
             const thumbnail =
               `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-
+            
             // 公開日時
             const publishedMatch = entry.match(
               /<published>(.*?)<\/published>/
             );
-
+            
             const published =
               publishedMatch?.[1] || "";
-
+            
+            // =========================
+            // 配信ページ取得
+            // =========================
+            
+            let scheduledStartTime = "";
+            
+            try {
+            
+              const watchUrl =
+                `https://www.youtube.com/watch?v=${videoId}`;
+            
+              const watchRes = await fetch(watchUrl, {
+                headers: {
+                  "User-Agent": "Mozilla/5.0"
+                }
+              });
+            
+              const watchHtml = await watchRes.text();
+            
+              const scheduledMatch =
+                watchHtml.match(
+                  /"scheduledStartTime":"(\d+)"/
+                );
+            
+              if (scheduledMatch?.[1]) {
+            
+                scheduledStartTime =
+                  scheduledMatch[1];
+            
+              }
+            
+            } catch (e) {
+            
+              console.error(
+                "scheduledStartTime error:",
+                videoId,
+                e
+              );
+            }
+            
             allStreams.push({
               memberName: member.name,
               title,
               videoId,
               thumbnail,
-              published
+              published,
+              scheduledStartTime
             });
           }
         } catch (err) {
@@ -195,7 +252,7 @@ ${streams.map(v => `
       </div>
       
       <div class="stream-date">
-        ${formatDate(v.published)}
+        ${formatScheduleTime(v.scheduledStartTime)}
       </div>
 
     </div>
