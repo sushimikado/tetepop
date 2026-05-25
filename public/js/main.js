@@ -201,7 +201,6 @@ async function loadStreamChecker() {
     );
 
     el.innerHTML = `
-      <div class="grid">
 
         <div class="card">
 
@@ -221,7 +220,6 @@ async function loadStreamChecker() {
 
           </div>
         </div>
-      </div>
     `;
   }
 }
