@@ -32,8 +32,9 @@ export default async function handler(req, res) {
           const watchRes = await fetch(`https://www.youtube.com/watch?v=${videoId}`, { headers: { "User-Agent": "Mozilla/5.0" } });
           const html = await watchRes.text();
           
-          // JSON内の時刻取得を強化
-          const timeMatch = html.match(/"(scheduledStartTime|actualStartTime|startTimestamp)":"?(\d+)"?/);
+          // 配信予定時刻を取得、設定されていなければ枠を作成した時間（RSS公開日時）
+          const timeMatch = html.match(/"scheduledStartTime":"?(\d+)"?/);
+          const startTime = timeMatch ? timeMatch[1] : Math.floor(new Date(published).getTime() / 1000);
           
           // 【改善】JSONの開始時刻があればそれを使う。なければRSSの公開日時をDate型に変換してUnixタイムスタンプにする
           let startTime = timeMatch ? timeMatch[2] : Math.floor(new Date(published).getTime() / 1000);
