@@ -461,9 +461,16 @@ header {
     font-size: 1.2rem;
     margin-bottom: 5px;
 }
-.status:contains("配信中") { background: var(--color-3); }
-.status:contains("配信終了") { background: var(--color-4); }
-.status:contains("配信予定") { background: var(--color-5); }
+
+.status-ended { 
+  background: var(--color-4); 
+}
+.status-now { 
+  background: var(--color-3); 
+}
+.status-futurePlan { 
+  background: var(--color-5); 
+}
 
 .title {
   font-size: 1.2rem;
