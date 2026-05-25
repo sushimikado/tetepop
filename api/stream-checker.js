@@ -16,6 +16,18 @@ export default async function handler(req, res) {
         .replace(/"/g, "&quot;");
     }
 
+    function formatDate(dateString) {
+      if (!dateString) return "";
+      const date = new Date(dateString);    
+      return date.toLocaleString("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
     // =========================
     // Notion取得
     // =========================
@@ -178,8 +190,12 @@ ${streams.map(v => `
         ${escapeHtml(v.title)}
       </div>
 
-      <div class="yomi">
+      <div class="name">
         ${escapeHtml(v.memberName)}
+      </div>
+      
+      <div class="stream-date">
+        ${formatDate(v.published)}
       </div>
 
     </div>
