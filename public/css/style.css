@@ -457,27 +457,14 @@ header {
   align-items: center;
 }
 
-.live-badge {
-  display: inline-block;
-  background: #ff3b30;
-  color: white;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  margin: 0px 0px 6px -2px;
+.status {
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
 }
-
-.live-badge-empty {
-  display: inline-block;
-  background: #666666;
-  color: white;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  margin: 0px 0px 6px -2px;
-}
+.status:contains("配信中") { color: #ff0000; }
+.status:contains("配信終了") { color: #888; }
+.status:contains("配信予定") { color: #007bff; }
 
 .title {
   font-size: 12px;
