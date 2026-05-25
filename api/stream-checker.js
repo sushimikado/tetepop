@@ -52,7 +52,7 @@ export default async function handler(req, res) {
     // 3. ソートとフィルタリング
     const now = Math.floor(Date.now() / 1000);
     const filteredStreams = allStreams
-      .filter(v => (Number(v.startTime) || 0) > (now - 10800)) // 3時間以内の枠のみ
+      .filter(v => (Number(v.startTime) || 0) > (now - 21600)) // 6時間以内の枠のみ
       .sort((a, b) => Number(a.startTime) - Number(b.startTime)); // 昇順ソート
 
     // 4. HTML生成
