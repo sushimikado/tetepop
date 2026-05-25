@@ -181,6 +181,17 @@ export default async function handler(req, res) {
                 e
               );
             }
+
+            console.log("DEBUG: Title=", title, "startTime=", startTime);
+            
+            allStreams.push({
+              memberName: member.name,
+              title,
+              videoId,
+              thumbnail,
+              published,
+              startTime
+            });
             
             allStreams.push({
               memberName: member.name,
