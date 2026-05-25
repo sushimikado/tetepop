@@ -1,320 +1,83 @@
 export default async function handler(req, res) {
+  // キャッシュを完全に無効化（常に最新をチェック）
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Content-Type", "text/html");
+
   try {
     const NOTION_TOKEN = process.env.NOTION_TOKEN;
-    const NOTION_MEMBERS_DATABASE_ID =
-      process.env.NOTION_MEMBERS_DATABASE_ID;
+    const NOTION_MEMBERS_DATABASE_ID = process.env.NOTION_MEMBERS_DATABASE_ID;
 
-    // 検索したいタグ
-    // const KEYWORD = "#ててぽぷ";
-
-    function escapeHtml(str) {
-      if (!str) return "";
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-    
-    function formatScheduleTime(unixTime) {
-    
-      if (!unixTime) return "";
-    
-      const date =
-        new Date(Number(unixTime) * 1000);
-    
-      return date.toLocaleString("ja-JP", {
-        timeZone: "Asia/Tokyo",
-        month: "numeric",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    function formatDate(dateString) {
-      if (!dateString) return "";
-      const date = new Date(dateString);    
-      return date.toLocaleString("ja-JP", {
-        timeZone: "Asia/Tokyo",
-        month: "numeric",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    // =========================
-    // Notion取得
-    // =========================
-    const notionRes = await fetch(
-      `https://api.notion.com/v1/databases/${NOTION_MEMBERS_DATABASE_ID}/query`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${NOTION_TOKEN}`,
-          "Content-Type": "application/json",
-          "Notion-Version": "2022-06-28"
-        }
+    // NotionからチャンネルID取得
+    const notionRes = await fetch(`https://api.notion.com/v1/databases/${NOTION_MEMBERS_DATABASE_ID}/query`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${NOTION_TOKEN}`,
+        "Content-Type": "application/json",
+        "Notion-Version": "2022-06-28"
       }
-    );
-
+    });
     const notionData = await notionRes.json();
-
-    // =========================
-    // チャンネルID一覧
-    // =========================
     const channels = notionData.results
-      .map(page => {
-        const p = page.properties;
-
-        const name =
-          (p["名前"]?.title || [])
-            .map(t => t.plain_text || "")
-            .join("")
-            .trim();
-
-        const channelId =
-          p["YouTubeChannelID"]?.rich_text?.[0]?.plain_text || "";
-
-        return {
-          name,
-          channelId
-        };
-      })
+      .map(page => ({
+        name: page.properties["名前"]?.title[0]?.plain_text || "Unknown",
+        channelId: page.properties["YouTubeChannelID"]?.rich_text[0]?.plain_text || ""
+      }))
       .filter(v => v.channelId);
 
-    // =========================
-    // RSS取得
-    // =========================
     const allStreams = [];
 
-    await Promise.all(
-      channels.map(async member => {
-        try {
-          const rssUrl =
-            `https://www.youtube.com/feeds/videos.xml?channel_id=${member.channelId}`;
+    // RSS取得と解析
+    await Promise.all(channels.map(async member => {
+      try {
+        const rssRes = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${member.channelId}`, { headers: { "User-Agent": "Mozilla/5.0" } });
+        const xml = await rssRes.text();
+        const entries = xml.split("<entry>").slice(1);
 
-          const rssRes = await fetch(rssUrl, {
-            headers: {
-              "User-Agent": "Mozilla/5.0"
-            }
+        for (const entry of entries) {
+          const videoId = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/)?.[1];
+          if (!videoId) continue;
+
+          // 配信ページから開始時刻を抽出
+          const watchRes = await fetch(`https://www.youtube.com/watch?v=${videoId}`, { headers: { "User-Agent": "Mozilla/5.0" } });
+          const html = await watchRes.text();
+          
+          // 開始時刻を抽出（正規表現を強化）
+          const timeMatch = html.match(/"(actual|scheduled)StartTime":"?(\d+)"?/);
+          const startTime = timeMatch ? timeMatch[2] : "";
+
+          allStreams.push({
+            memberName: member.name,
+            title: entry.match(/<title>(.*?)<\/title>/s)?.[1]?.trim() || "No Title",
+            videoId,
+            thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+            startTime
           });
-
-          const xml = await rssRes.text();
-
-          // entryごとに分割
-          const entries = xml.split("<entry>");
-
-          for (const entry of entries) {
-            // タイトル
-            const titleMatch = entry.match(/<title>(.*?)<\/title>/s);
-            const title = titleMatch?.[1]?.trim() || "";
-
-            // キーワード判定
-            // if (!title.includes(KEYWORD)) continue;
-
-            // 動画ID
-            const videoIdMatch = entry.match(
-              /<yt:videoId>(.*?)<\/yt:videoId>/
-            );
-
-            const videoId = videoIdMatch?.[1]?.trim();
-
-            if (!videoId) continue;
-
-            // サムネ
-            const thumbnail =
-              `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-            
-            // 公開日時
-            const publishedMatch = entry.match(
-              /<published>(.*?)<\/published>/
-            );
-            
-            const published =
-              publishedMatch?.[1] || "";
-            
-            // =========================
-            // 配信ページ取得
-            // =========================
-            
-            let startTime = "";
-            
-            try {
-            
-              const watchUrl =
-                `https://www.youtube.com/watch?v=${videoId}`;
-            
-              const watchRes = await fetch(watchUrl, {
-                headers: {
-                  "User-Agent": "Mozilla/5.0"
-                }
-              });
-            
-              const watchHtml =
-                await watchRes.text();
-            
-              // 実際の開始時刻
-              const actualMatch =
-                watchHtml.match(
-                  /"actualStartTime":(\d+)/
-                );
-              
-              // 予定開始時刻
-              const scheduledMatch =
-                watchHtml.match(
-                  /"scheduledStartTime":(\d+)/
-                );
-              
-              // actual を優先
-              startTime =
-                actualMatch?.[1]
-                || scheduledMatch?.[1]
-                || "";
-              
-            } catch (e) {
-            
-              console.error(
-                "startTime error:",
-                videoId,
-                e
-              );
-            }
-
-            console.log("DEBUG: Title=", title, "startTime=", startTime);
-            
-            allStreams.push({
-              memberName: member.name,
-              title,
-              videoId,
-              thumbnail,
-              published,
-              startTime
-            });
-            
-            allStreams.push({
-              memberName: member.name,
-              title,
-              videoId,
-              thumbnail,
-              published,
-              startTime
-            });
-          }
-        } catch (err) {
-          console.error("RSS error:", member.channelId, err);
         }
-      })
-    );
+      } catch (e) { console.error("RSS Fetch Error:", e); }
+    }));
 
-    // =========================
-    // 新しい順
-    // =========================
-allStreams.sort((a, b) => {
-  const aTime = Number(a.startTime) || 0;
-  const bTime = Number(b.startTime) || 0;
-  return aTime - bTime; // 昇順（時間が早い順）
-});
+    // 時刻が早い順にソート
+    allStreams.sort((a, b) => (Number(a.startTime) || 0) - (Number(b.startTime) || 0));
 
-    // =========================
-    // 最大30件
-    // =========================
-    const streams = allStreams.slice(0, 30);
+    // HTML生成
+    const html = allStreams.length === 0 
+      ? '<div class="card"><div class="title">現在配信中のメンバーはいません</div></div>'
+      : allStreams.slice(0, 30).map(v => `
+        <a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank" class="card-link">
+          <div class="card">
+            <img class="thumb" src="${v.thumbnail}">
+            <div class="card-bottom">
+              <div class="title">${v.title.replace(/</g, "&lt;")}</div>
+              <div class="name">${v.memberName}</div>
+              <div class="stream-date">${v.startTime ? new Date(Number(v.startTime) * 1000).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "時刻未定"}</div>
+            </div>
+          </div>
+        </a>
+      `).join("");
 
-// =========================
-// HTML生成
-// =========================
-const html =
-  streams.length === 0
-    ? `
-<div class="card">
-  <div class="thumb-empty">
-    STANDBY
-  </div>
-
-  <div class="card-bottom">
-    <span class="live-badge-empty">● INFO</span>
-
-    <div class="title">
-      条件に一致する配信枠が見つかりません
-    </div>
-  </div>
-</div>
-`
-    : `
-${streams.map(v => `
-<a
-  href="https://www.youtube.com/watch?v=${v.videoId}"
-  target="_blank"
-  class="card-link"
->
-  <div class="card">
-
-    <img
-      class="thumb"
-      src="${v.thumbnail}"
-      alt="${escapeHtml(v.title)}"
-    >
-
-    <div class="card-bottom">
-
-      <span class="live-badge">
-        ● YouTube
-      </span>
-
-      <div class="title">
-        ${escapeHtml(v.title)}
-      </div>
-
-      <div class="name">
-        ${escapeHtml(v.memberName)}
-      </div>
-      
-      <div class="stream-date">
-        ${formatScheduleTime(v.startTime)}
-      </div>
-
-    </div>
-  </div>
-</a>
-`).join("")}
-`;
-
-    // =========================
-    // キャッシュ
-    // =========================
-    // res.setHeader(
-    //   "Cache-Control",
-    //   "public, s-maxage=900, stale-while-revalidate=59"
-    // );
-
-    // 【テスト用】キャッシュを無効化する
-    res.setHeader(
-      "Cache-Control", 
-      "no-store, no-cache, must-revalidate, proxy-revalidate"
-    );
-
-    res.setHeader("Content-Type", "text/html");
     res.status(200).send(html);
-
   } catch (e) {
     console.error(e);
-
-    res.status(500).send(`
-  <div class="card">
-    <div class="thumb-empty">
-      ERROR
-    </div>
-
-    <div class="card-bottom">
-      <span class="live-badge-empty">● ERROR</span>
-
-      <div class="title">
-        stream-checker.js の実行に失敗しました
-      </div>
-    </div>
-  </div>
-`);
+    res.status(500).send("エラーが発生しました");
   }
 }
