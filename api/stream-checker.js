@@ -133,61 +133,59 @@ export default async function handler(req, res) {
     // =========================
     const streams = allStreams.slice(0, 30);
 
-    // =========================
-    // HTML生成
-    // =========================
-    const html =
-      streams.length === 0
-        ? `
-  <div class="card">
-    <div class="thumb-empty">
-      STANDBY
-    </div>
+// =========================
+// HTML生成
+// =========================
+const html =
+  streams.length === 0
+    ? `
+<div class="card">
+  <div class="thumb-empty">
+    STANDBY
+  </div>
 
-    <div class="card-bottom">
-      <span class="live-badge-empty">● INFO</span>
+  <div class="card-bottom">
+    <span class="live-badge-empty">● INFO</span>
 
-      <div class="title">
-        条件に一致する配信枠が見つかりません
-      </div>
+    <div class="title">
+      条件に一致する配信枠が見つかりません
     </div>
   </div>
-`
-        : `
-<div class="grid">
-${streams.map(v => `
-  <a
-    href="https://www.youtube.com/watch?v=${v.videoId}"
-    target="_blank"
-    class="card-link"
-  >
-    <div class="card">
-
-      <img
-        class="thumb"
-        src="${v.thumbnail}"
-        alt="${escapeHtml(v.title)}"
-      >
-
-      <div class="card-bottom">
-
-        <span class="live-badge">
-          ● YouTube
-        </span>
-
-        <div class="title">
-          ${escapeHtml(v.title)}
-        </div>
-
-        <div class="yomi">
-          ${escapeHtml(v.memberName)}
-        </div>
-
-      </div>
-    </div>
-  </a>
-`).join("")}
 </div>
+`
+    : `
+${streams.map(v => `
+<a
+  href="https://www.youtube.com/watch?v=${v.videoId}"
+  target="_blank"
+  class="card-link"
+>
+  <div class="card">
+
+    <img
+      class="thumb"
+      src="${v.thumbnail}"
+      alt="${escapeHtml(v.title)}"
+    >
+
+    <div class="card-bottom">
+
+      <span class="live-badge">
+        ● YouTube
+      </span>
+
+      <div class="title">
+        ${escapeHtml(v.title)}
+      </div>
+
+      <div class="yomi">
+        ${escapeHtml(v.memberName)}
+      </div>
+
+    </div>
+  </div>
+</a>
+`).join("")}
 `;
 
     // =========================
@@ -205,7 +203,6 @@ ${streams.map(v => `
     console.error(e);
 
     res.status(500).send(`
-<div class="grid">
   <div class="card">
     <div class="thumb-empty">
       ERROR
@@ -219,7 +216,6 @@ ${streams.map(v => `
       </div>
     </div>
   </div>
-</div>
 `);
   }
 }
