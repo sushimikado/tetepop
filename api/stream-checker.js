@@ -48,6 +48,31 @@ await Promise.all(channels.map(async member => {
       
         const watchHtml =
           await watchRes.text();
+        // ログを見る
+        console.log(
+          videoId,
+          {
+            scheduled:
+              watchHtml.match(
+                /"scheduledStartTime":"([^"]+)"/
+              )?.[1],
+        
+            liveNow:
+              watchHtml.includes(
+                '"isLiveNow":true'
+              ),
+        
+            liveContent:
+              watchHtml.includes(
+                '"isLiveContent":true'
+              ),
+        
+            upcoming:
+              watchHtml.includes(
+                'upcomingEventData'
+              )
+          }
+        );
       
         const scheduledMatch =
           watchHtml.match(
@@ -197,28 +222,3 @@ await Promise.all(channels.map(async member => {
     res.status(500).send("エラー");
   }
 }
-
-console.log(
-  videoId,
-  {
-    scheduled:
-      watchHtml.match(
-        /"scheduledStartTime":"([^"]+)"/
-      )?.[1],
-
-    liveNow:
-      watchHtml.includes(
-        '"isLiveNow":true'
-      ),
-
-    liveContent:
-      watchHtml.includes(
-        '"isLiveContent":true'
-      ),
-
-    upcoming:
-      watchHtml.includes(
-        'upcomingEventData'
-      )
-  }
-);
