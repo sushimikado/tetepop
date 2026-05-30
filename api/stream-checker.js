@@ -46,7 +46,9 @@ await Promise.all(channels.map(async member => {
 }));
 
 const ids =
-  allStreams.map(v => v.videoId);
+  allStreams
+    .map(v => v.videoId)
+    .slice(0, 50);
 console.log(
   "video count:",
   ids.length
