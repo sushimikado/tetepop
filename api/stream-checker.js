@@ -62,6 +62,18 @@ await Promise.all(channels.map(async member => {
 
 const now = Date.now();
 
+console.log(
+  "ててぽぷ候補:",
+  allStreams
+    .filter(v =>
+      v.title.includes("#ててぽぷ")
+    )
+    .map(v => ({
+      title: v.title,
+      videoId: v.videoId
+    }))
+);
+
 const recentStreams =
   allStreams.filter(v => {
 
@@ -71,10 +83,18 @@ const recentStreams =
     const publishedTime =
       new Date(v.published).getTime();
 
-    return (
+    const isRecent =
       now - publishedTime
       <
-      24 * 60 * 60 * 1000
+      24 * 60 * 60 * 1000;
+
+    // タイトルフィルター
+    // const isTetepopu =
+    //   v.title.includes("#ててぽぷ");
+
+    return (
+      isRecent
+      // && isTetepopu
     );
 
   });
@@ -320,6 +340,7 @@ const html = filteredStreams.length === 0
 
     res.status(200).send(html);
   } catch (e) {
+    console.error(e);
     res.status(500).send("エラー");
   }
 }
