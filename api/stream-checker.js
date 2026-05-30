@@ -120,6 +120,18 @@ for (const stream of allStreams) {
     detail.actualEnd;
 }
 
+console.log(
+  "allStreams:",
+  allStreams.length
+);
+
+console.log(
+  allStreams.slice(0, 20).map(v => ({
+    title: v.title,
+    videoId: v.videoId
+  }))
+);
+
 // 3. ソートとフィルタリング
 const now =
   Date.now();
