@@ -47,6 +47,10 @@ await Promise.all(channels.map(async member => {
 
 const ids =
   allStreams.map(v => v.videoId);
+console.log(
+  "video count:",
+  ids.length
+);
 
 const apiUrl =
   "https://www.googleapis.com/youtube/v3/videos"
