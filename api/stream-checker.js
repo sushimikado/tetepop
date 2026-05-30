@@ -45,48 +45,57 @@ await Promise.all(channels.map(async member => {
   } catch (e) { console.error("Error:", e); }
 }));
 
-const ids =
-  allStreams
-    .map(v => v.videoId)
-    .slice(0, 50);
-console.log(
-  "video count:",
-  ids.length
-);
-
-const apiUrl =
-  "https://www.googleapis.com/youtube/v3/videos"
-  + "?part=liveStreamingDetails"
-  + "&id=" + ids.join(",")
-  + "&key=" + process.env.YOUTUBE_API_KEY;
-
-const apiRes =
-  await fetch(apiUrl);
-
-const apiData =
-  await apiRes.json();
-console.log(
-  JSON.stringify(apiData, null, 2)
-);
+const allIds =
+  allStreams.map(v => v.videoId);
 
 const detailsMap = {};
 
-for (const item of apiData.items || []) {
+for (
+  let i = 0;
+  i < allIds.length;
+  i += 50
+) {
 
-  detailsMap[item.id] = {
+  const ids =
+    allIds.slice(i, i + 50);
 
-    scheduled:
-      item.liveStreamingDetails
-        ?.scheduledStartTime,
+  console.log(
+    "API request:",
+    ids.length
+  );
 
-    actualStart:
-      item.liveStreamingDetails
-        ?.actualStartTime,
+  const apiUrl =
+    "https://www.googleapis.com/youtube/v3/videos"
+    + "?part=liveStreamingDetails"
+    + "&id=" + ids.join(",")
+    + "&key=" + process.env.YOUTUBE_API_KEY;
 
-    actualEnd:
-      item.liveStreamingDetails
-        ?.actualEndTime
-  };
+  const apiRes =
+    await fetch(apiUrl);
+
+  const apiData =
+    await apiRes.json();
+
+  for (
+    const item of
+    (apiData.items || [])
+  ) {
+
+    detailsMap[item.id] = {
+
+      scheduled:
+        item.liveStreamingDetails
+          ?.scheduledStartTime,
+
+      actualStart:
+        item.liveStreamingDetails
+          ?.actualStartTime,
+
+      actualEnd:
+        item.liveStreamingDetails
+          ?.actualEndTime
+    };
+  }
 }
 
 for (const stream of allStreams) {
