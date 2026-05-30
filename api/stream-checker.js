@@ -81,6 +81,11 @@ for (
     (apiData.items || [])
   ) {
 
+    console.log(
+      item.id,
+      item.liveStreamingDetails
+    );
+
     detailsMap[item.id] = {
 
       scheduled:
