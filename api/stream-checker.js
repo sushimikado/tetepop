@@ -59,6 +59,9 @@ const apiRes =
 
 const apiData =
   await apiRes.json();
+console.log(
+  JSON.stringify(apiData, null, 2)
+);
 
 const detailsMap = {};
 
