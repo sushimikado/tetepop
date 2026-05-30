@@ -27,13 +27,6 @@ await Promise.all(channels.map(async member => {
       const videoId = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/)?.[1];
       const published = entry.match(/<published>(.*?)<\/published>/)?.[1]; // RSSの公開日時
       if (!videoId) continue;
-      
-      allStreams.push({
-        memberName: member.name,
-        title,
-        videoId,
-        thumbnail
-      });
 
       const title =
         entry.match(/<title>(.*?)<\/title>/s)?.[1]?.trim()
@@ -41,14 +34,12 @@ await Promise.all(channels.map(async member => {
 
       const thumbnail =
         `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-      
+
       allStreams.push({
         memberName: member.name,
         title,
         videoId,
-        thumbnail,
-        startTime,
-        isLiveNow
+        thumbnail
       });
     }
   } catch (e) { console.error("Error:", e); }
