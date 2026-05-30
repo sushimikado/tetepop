@@ -192,9 +192,6 @@ console.log(
 );
 
 // 3. ソートとフィルタリング
-const now =
-  Date.now();
-
 const filteredStreams =
   recentStreams
     .filter(v => {
