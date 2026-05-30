@@ -144,7 +144,6 @@ const filteredStreams =
         return false;
 
       // 配信終了
-
       if (v.actualEndTime) {
 
         const end =
@@ -160,9 +159,9 @@ const filteredStreams =
       }
 
       // 配信予定・配信中
-
       return true;
     })
+  
     .sort((a, b) => {
 
       return (
@@ -177,6 +176,23 @@ const filteredStreams =
         ).getTime()
       );
     });
+    
+console.log(
+  "filteredStreams:",
+  filteredStreams.length
+);
+
+console.log(
+  filteredStreams.map(v => ({
+    title: v.title,
+    status:
+      v.actualEndTime
+        ? "ended"
+        : v.actualStartTime
+        ? "live"
+        : "scheduled"
+  }))
+);
 
 // 4. HTML生成
 const html = filteredStreams.length === 0 
