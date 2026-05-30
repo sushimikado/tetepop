@@ -135,9 +135,6 @@ await Promise.all(channels.map(async member => {
     const html = filteredStreams.length === 0 
       ? '<div class="card"><div class="title">配信情報が見つかりません</div></div>'
       : filteredStreams.map(v => {
-          // 【追加】状況判定ロジック
-          const start =
-            Number(v.startTime);
           
           let statusText =
             "配信予定";
