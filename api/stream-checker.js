@@ -121,6 +121,31 @@ for (const stream of allStreams) {
 }
 
 console.log(
+  "ended count:",
+  allStreams.filter(
+    v => v.actualEndTime
+  ).length
+);
+
+console.log(
+  "scheduled count:",
+  allStreams.filter(
+    v =>
+      v.scheduledTime &&
+      !v.actualStartTime
+  ).length
+);
+
+console.log(
+  "live count:",
+  allStreams.filter(
+    v =>
+      v.actualStartTime &&
+      !v.actualEndTime
+  ).length
+);
+
+console.log(
   "allStreams:",
   allStreams.length
 );
