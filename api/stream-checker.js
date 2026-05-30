@@ -28,84 +28,12 @@ await Promise.all(channels.map(async member => {
       const published = entry.match(/<published>(.*?)<\/published>/)?.[1]; // RSSの公開日時
       if (!videoId) continue;
       
-      // 値の抽出をより安全に
-      let startTime = "";
-      let isLiveNow = false;
-      
-      try {
-      
-        const watchUrl =
-          `https://www.youtube.com/watch?v=${videoId}`;
-      
-        const watchRes = await fetch(
-          watchUrl,
-          {
-            headers: {
-              "User-Agent": "Mozilla/5.0"
-            }
-          }
-        );
-      
-        const watchHtml =
-          await watchRes.text();
-        // ログを見る
-        console.log(
-          videoId,
-          {
-            scheduled:
-              watchHtml.match(
-                /"scheduledStartTime":"([^"]+)"/
-              )?.[1],
-        
-            liveNow:
-              watchHtml.includes(
-                '"isLiveNow":true'
-              ),
-        
-            liveContent:
-              watchHtml.includes(
-                '"isLiveContent":true'
-              ),
-        
-            upcoming:
-              watchHtml.includes(
-                'upcomingEventData'
-              )
-          }
-        );
-      
-        const scheduledMatch =
-          watchHtml.match(
-            /"scheduledStartTime":"(\d+)"/
-          );
-      
-        if (scheduledMatch?.[1]) {
-      
-          startTime =
-            scheduledMatch[1];
-      
-        } else {
-      
-          const pubDate =
-            Math.floor(
-              new Date(published).getTime() / 1000
-            );
-      
-          startTime =
-            String(pubDate);
-        }
-      
-        isLiveNow =
-          watchHtml.includes('"isLiveNow":true');
-      
-      } catch (e) {
-      
-        console.error(
-          "watch page error:",
-          videoId,
-          e
-        );
-      }
+      allStreams.push({
+        memberName: member.name,
+        title,
+        videoId,
+        thumbnail
+      });
 
       const title =
         entry.match(/<title>(.*?)<\/title>/s)?.[1]?.trim()
@@ -126,96 +54,171 @@ await Promise.all(channels.map(async member => {
   } catch (e) { console.error("Error:", e); }
 }));
 
-    // 3. ソートとフィルタリング
-    const now = Math.floor(Date.now() / 1000);
-    const filteredStreams =
-      allStreams
-        .filter(v => {
-    
-          const start =
-            Number(v.startTime);
-    
-          if (!start) {
-            return false;
-          }
-    
-          const twelveHours =
-            12 * 60 * 60;
-    
-          return (
-            start > now ||
-            v.isLiveNow ||
-            (now - start) < twelveHours
-          );
-        })
-        .sort((a, b) => {
-          return (
-            Number(a.startTime)
-            -
-            Number(b.startTime)
-          );
-        });
+const ids =
+  allStreams.map(v => v.videoId);
 
-    // 4. HTML生成
-    const html = filteredStreams.length === 0 
-      ? '<div class="card"><div class="title">配信情報が見つかりません</div></div>'
-      : filteredStreams.map(v => {
+const apiUrl =
+  "https://www.googleapis.com/youtube/v3/videos"
+  + "?part=liveStreamingDetails"
+  + "&id=" + ids.join(",")
+  + "&key=" + process.env.YOUTUBE_API_KEY;
 
-          const start =
-            Number(v.startTime);
-        
-          let statusText =
-            "配信予定";
-          
-          let statusClass =
-            "status-futurePlan";
-          
-          if (v.isLiveNow) {
-          
-            statusText =
-              "配信中";
-          
-            statusClass =
-              "status-now";
-          
-          }
-          else if (start < now) {
-          
-            statusText =
-              "配信終了";
-          
-            statusClass =
-              "status-ended";
-          }
-          
-          return `
-            <a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank" class="card-link">
-              <div class="card">
-                <img class="thumb" src="${v.thumbnail}">
-                <div class="card-bottom">
-                  <div class="status ${statusClass}">${statusText}</div>
-                  <div class="title">${v.title.replace(/</g, "&lt;")}</div>
-                  <div class="name">${v.memberName}</div>
-                  <div class="stream-date">
-                    ${
-                      new Date(start * 1000)
-                        .toLocaleString(
-                          "ja-JP",
-                          {
-                            timeZone: "Asia/Tokyo",
-                            month: "numeric",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit"
-                          }
-                        )
+const apiRes =
+  await fetch(apiUrl);
+
+const apiData =
+  await apiRes.json();
+
+const detailsMap = {};
+
+for (const item of apiData.items || []) {
+
+  detailsMap[item.id] = {
+
+    scheduled:
+      item.liveStreamingDetails
+        ?.scheduledStartTime,
+
+    actualStart:
+      item.liveStreamingDetails
+        ?.actualStartTime,
+
+    actualEnd:
+      item.liveStreamingDetails
+        ?.actualEndTime
+  };
+}
+
+for (const stream of allStreams) {
+
+  const detail =
+    detailsMap[stream.videoId];
+
+  if (!detail) continue;
+
+  stream.scheduledTime =
+    detail.scheduled;
+
+  stream.actualStartTime =
+    detail.actualStart;
+
+  stream.actualEndTime =
+    detail.actualEnd;
+}
+
+// 3. ソートとフィルタリング
+const now =
+  Date.now();
+
+const filteredStreams =
+  allStreams
+    .filter(v => {
+
+      if (!v.scheduledTime)
+        return false;
+
+      // 配信終了
+
+      if (v.actualEndTime) {
+
+        const end =
+          new Date(
+            v.actualEndTime
+          ).getTime();
+
+        return (
+          now - end
+          <
+          6 * 60 * 60 * 1000
+        );
+      }
+
+      // 配信予定・配信中
+
+      return true;
+    })
+    .sort((a, b) => {
+
+      return (
+        new Date(
+          a.scheduledTime
+        ).getTime()
+
+        -
+
+        new Date(
+          b.scheduledTime
+        ).getTime()
+      );
+    });
+
+// 4. HTML生成
+const html = filteredStreams.length === 0 
+  ? '<div class="card"><div class="title">配信情報が見つかりません</div></div>'
+  : filteredStreams.map(v => {
+
+      const scheduled =
+        new Date(
+          v.scheduledTime
+        );
+      
+      let statusText =
+        "配信予定";
+      
+      let statusClass =
+        "status-futurePlan";
+      
+      if (
+        v.actualStartTime
+        &&
+        !v.actualEndTime
+      ) {
+      
+        statusText =
+          "配信中";
+      
+        statusClass =
+          "status-now";
+      }
+      
+      if (
+        v.actualEndTime
+      ) {
+      
+        statusText =
+          "配信終了";
+      
+        statusClass =
+          "status-ended";
+      }
+      
+      return `
+        <a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank" class="card-link">
+          <div class="card">
+            <img class="thumb" src="${v.thumbnail}">
+            <div class="card-bottom">
+              <div class="status ${statusClass}">${statusText}</div>
+              <div class="title">${v.title.replace(/</g, "&lt;")}</div>
+              <div class="name">${v.memberName}</div>
+              <div class="stream-date">
+                ${
+                  scheduled.toLocaleString(
+                    "ja-JP",
+                    {
+                      timeZone: "Asia/Tokyo",
+                      month: "numeric",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit"
                     }
-                  </div>
-                </div>
+                  )
+                }
               </div>
-            </a>
-          `;
-        }).join("");
+            </div>
+          </div>
+        </a>
+      `;
+    }).join("");
 
     res.status(200).send(html);
   } catch (e) {
