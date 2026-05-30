@@ -53,14 +53,34 @@ await Promise.all(channels.map(async member => {
         memberName: member.name,
         title,
         videoId,
-        thumbnail
+        thumbnail,
+        published
       });
     }
   } catch (e) { console.error("Error:", e); }
 }));
 
+const now = Date.now();
+
+const recentStreams =
+  allStreams.filter(v => {
+
+    if (!v.published)
+      return false;
+
+    const publishedTime =
+      new Date(v.published).getTime();
+
+    return (
+      now - publishedTime
+      <
+      3 * 24 * 60 * 60 * 1000
+    );
+
+  });
+
 const allIds =
-  allStreams.map(v => v.videoId);
+  recentStreams.map(v => v.videoId);
 
 const detailsMap = {};
 
@@ -117,7 +137,7 @@ for (
   }
 }
 
-for (const stream of allStreams) {
+for (const stream of recentStreams) {
 
   const detail =
     detailsMap[stream.videoId];
@@ -136,14 +156,14 @@ for (const stream of allStreams) {
 
 console.log(
   "ended count:",
-  allStreams.filter(
+  recentStreams.filter(
     v => v.actualEndTime
   ).length
 );
 
 console.log(
   "scheduled count:",
-  allStreams.filter(
+  recentStreams.filter(
     v =>
       v.scheduledTime &&
       !v.actualStartTime
@@ -152,7 +172,7 @@ console.log(
 
 console.log(
   "live count:",
-  allStreams.filter(
+  recentStreams.filter(
     v =>
       v.actualStartTime &&
       !v.actualEndTime
@@ -160,12 +180,12 @@ console.log(
 );
 
 console.log(
-  "allStreams:",
-  allStreams.length
+  "recentStreams:",
+  recentStreams.length
 );
 
 console.log(
-  allStreams.slice(0, 20).map(v => ({
+  recentStreams.slice(0, 20).map(v => ({
     title: v.title,
     videoId: v.videoId
   }))
@@ -176,7 +196,7 @@ const now =
   Date.now();
 
 const filteredStreams =
-  allStreams
+  recentStreams
     .filter(v => {
 
       if (!v.scheduledTime)
