@@ -27,13 +27,6 @@ await Promise.all(channels.map(async member => {
       const videoId = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/)?.[1];
       const published = entry.match(/<published>(.*?)<\/published>/)?.[1]; // RSSの公開日時
       if (!videoId) continue;
-
-      // 配信ページから開始時刻を抽出
-      const watchRes = await fetch(`https://www.youtube.com/watch?v=${videoId}`, { headers: { "User-Agent": "Mozilla/5.0" } });
-      const html = await watchRes.text();
-      
-      // 配信予定時刻を取得、設定されていなければ枠を作成した時間（RSS公開日時）
-      const timeMatch = html.match(/"scheduledStartTime":"?(\d+)"?/);
       
       // 値の抽出をより安全に
       let startTime = "";
@@ -88,6 +81,13 @@ await Promise.all(channels.map(async member => {
           e
         );
       }
+
+      const title =
+        entry.match(/<title>(.*?)<\/title>/s)?.[1]?.trim()
+        || "No Title";
+
+      const thumbnail =
+        `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
       
       allStreams.push({
         memberName: member.name,
@@ -136,7 +136,6 @@ await Promise.all(channels.map(async member => {
       ? '<div class="card"><div class="title">配信情報が見つかりません</div></div>'
       : filteredStreams.map(v => {
           // 【追加】状況判定ロジック
-          const start = Number(v.startTime);
           const start =
             Number(v.startTime);
           
