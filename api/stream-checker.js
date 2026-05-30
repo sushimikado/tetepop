@@ -74,7 +74,7 @@ const recentStreams =
     return (
       now - publishedTime
       <
-      3 * 24 * 60 * 60 * 1000
+      24 * 60 * 60 * 1000
     );
 
   });
