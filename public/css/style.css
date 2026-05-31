@@ -469,7 +469,7 @@ header {
   gap: 1rem;
   font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.3rem;
 }
 
 .status {
@@ -477,15 +477,15 @@ header {
 }
 
 .status-ended { 
-  background: #AAAAAA; 
-  color: var(--color-1);
+  background: var(--color-1);  
+  color: var(--color-8);
   padding: 0 0.75rem;
   border: solid 1.5px var(--color-1);
   border-radius: 999px;
 }
 .status-now { 
-  background: var(--color-1); 
-  color: var(--color-8);
+  background: var(--color-5); 
+  color: var(--color-1);
   padding: 0 0.75rem;
   border: solid 1.5px var(--color-1);
   border-radius: 999px;
