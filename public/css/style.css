@@ -171,6 +171,7 @@ header {
   height: auto;
   background-color: var(--color-1);
   border-radius: 999px;
+  margin-right: 3%;
 }
 
 .nav__pc a {
