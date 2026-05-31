@@ -242,7 +242,10 @@ header {
   width: auto;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 425px) {
+  .section-top {
+    margin-bottom: -1rem;
+  }
   .item-title {
     font-size: 4rem;
   }
@@ -300,6 +303,7 @@ header {
 .x-embed {
     display: flex;
     max-width: 420px !important;
+    min-width: 200px !important;
     padding-top: 6px;
 }
 
