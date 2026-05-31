@@ -281,7 +281,7 @@ const html = filteredStreams.length === 0
         );
       
       let statusText =
-        "配信予定";
+        "● 配信予定";
       
       let statusClass =
         "status-futurePlan";
@@ -293,7 +293,7 @@ const html = filteredStreams.length === 0
       ) {
       
         statusText =
-          "配信中";
+          "● 配信中";
       
         statusClass =
           "status-now";
@@ -304,7 +304,7 @@ const html = filteredStreams.length === 0
       ) {
       
         statusText =
-          "配信終了";
+          "● 配信終了";
       
         statusClass =
           "status-ended";
@@ -315,24 +315,24 @@ const html = filteredStreams.length === 0
           <div class="card">
             <img class="thumb" src="${v.thumbnail}">
             <div class="card-bottom">
-              <div class="status">
-                <p class="${statusClass}">${statusText}</p>
+              <div class="status-and-date">
+                <div class="${statusClass}">${statusText}</div>
+                <div class="stream-date">
+                  ${
+                    scheduled.toLocaleString(
+                      "ja-JP",
+                      {
+                        timeZone: "Asia/Tokyo",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                      }
+                    )
+                  }
+                </div>
               </div>
               <div class="name">${v.memberName}</div>
-              <div class="stream-date">
-                ${
-                  scheduled.toLocaleString(
-                    "ja-JP",
-                    {
-                      timeZone: "Asia/Tokyo",
-                      month: "numeric",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit"
-                    }
-                  )
-                }
-              </div>
               <div class="title">${v.title.replace(/</g, "&lt;")}</div>
             </div>
           </div>
