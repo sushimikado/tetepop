@@ -303,6 +303,14 @@ header {
   padding-top: 1.6rem;
 }
 
+.stream__text {
+  padding-bottom: 1.6rem;;
+}
+
+.members__text {
+  padding-bottom: 1.6rem;;
+}
+
 /* ======== メンバー表 ======== */
 .container {
   margin: 0 auto;
@@ -329,7 +337,6 @@ header {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-bottom: solid 3px var(--color-1);
 }
 
 /* 画像トリミング */
@@ -430,12 +437,12 @@ header {
   text-decoration: none;
   color: inherit;
   display: flex;
-  transition: transform 0.2s;
+  transition: transform 0.4s ease;
 }
 
 .card-link:hover .card {
   transform: translateY(-3px);
-  box-shadow: 4px 6px 16px rgba(0,0,0,0.11);
+  box-shadow: 3px 4px 8px rgba(0,0,0,0.1);
 }
 
 .thumb {
@@ -457,19 +464,25 @@ header {
   align-items: center;
 }
 
-.status {
-    font-size: 1.2rem;
-    margin-bottom: 5px;
+.status-and-date {
+  display: flex;
+  font-weight: 700;
 }
 
 .status-ended { 
   background: var(--color-4); 
+  color: var(--color-8);
+  width: fit-content;
 }
 .status-now { 
   background: var(--color-3); 
+  color: var(--color-8);
+  width: fit-content;
 }
 .status-futurePlan { 
   background: var(--color-5); 
+  color: var(--color-8);
+  width: fit-content;
 }
 
 .title {
