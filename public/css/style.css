@@ -467,7 +467,7 @@ header {
 
 .StatusDate {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 0.3rem;
@@ -485,8 +485,8 @@ header {
   border-radius: 999px;
 }
 .status-now { 
-  background: var(--color-5); 
-  color: var(--color-1);
+  background: var(--color-4); 
+  color: var(--color-8);
   padding: 0 0.75rem;
   border: solid 1.5px var(--color-1);
   border-radius: 999px;
