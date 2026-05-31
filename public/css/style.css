@@ -242,7 +242,7 @@ header {
   width: auto;
 }
 
-@media (max-width: 425px) {
+@media (max-width: 424px) {
   .section-top {
     margin-bottom: -1rem;
   }
@@ -358,6 +358,22 @@ header {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+#MEMBER-LIST .card:nth-child(4n+1) .image-wrap {
+  background-color: var(--color-2);
+}
+
+#MEMBER-LIST .card:nth-child(4n+2) .image-wrap {
+  background-color: var(--color-3);
+}
+
+#MEMBER-LIST .card:nth-child(4n+3) .image-wrap {
+  background-color: var(--color-4);
+}
+
+#MEMBER-LIST .card:nth-child(4n+4) .image-wrap {
+  background-color: var(--color-5);
 }
 
 .card-bottom {
