@@ -237,6 +237,21 @@ header {
   letter-spacing: 0.05em;
 }
 
+.item-title-img {
+  height: 7.2rem;
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .item-title {
+    font-size: 4rem;
+  }
+  .item-title-img {
+    height: 4.8rem;
+    width: auto;
+  }
+}
+
 .section-bottom {
   /* margin-bottom: 120px; */
   position: relative;
