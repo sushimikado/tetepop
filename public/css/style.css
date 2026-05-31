@@ -163,38 +163,29 @@ header {
   text-decoration: none;
 }
 
-.nav__pc {
-  display: flex;
-  padding: 0 2rem;
-  height: auto;
-  background-color: var(--color-1);
-  border-radius: 999px;
-}
-
-.nav__pc a {
-  display: inline-block;
-  padding: 0 2rem;
-  font-family: "Righteous", sans-serif;
-  font-size: 2.4rem;
-  line-height: 1.5;
-  color: var(--color-8);
-  text-decoration: none;
-}
-
 .header__btn {
+  display: flex;
+  align-items: center;
+  padding-right: 4.8%;
+}
+
+.nav-sp {
   display: none;
 }
 
-@media (max-width: 768px) {
-  .header__btn {
-    display: flex;
-    align-items: center;
-    padding-right: 4.8%;
-  }
-  .nav__pc {
+/* @media (max-width: 768px) {
+  .nav {
     display: none;
   }
-}
+  .nav-sp {
+    display: flex;
+  }
+  .nav-sp a {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
+} */
 
 /* ======== メイン ======== */
 .main-img {
@@ -287,7 +278,7 @@ header {
     padding-top: 6px;
 }
 
-.about-and-news {
+/* .about-and-news {
   display: flex;
   justify-content: space-between;
   gap: 2%;
@@ -302,7 +293,7 @@ header {
     flex-direction: column;
     gap: 0;
   }
-}
+} */
 
 .about__text {
   padding-bottom: 1.6rem;
@@ -312,7 +303,15 @@ header {
   padding-top: 1.6rem;
 }
 
-/* ======== MEMBERS ======== */
+.stream__text {
+  padding-bottom: 1.6rem;;
+}
+
+.members__text {
+  padding-bottom: 1.6rem;;
+}
+
+/* ======== メンバー表 ======== */
 .container {
   margin: 0 auto;
   padding: 0 16px;
@@ -322,6 +321,7 @@ header {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
+  padding-bottom: 0.6rem;
 }
 
 .card {
@@ -331,6 +331,7 @@ header {
   border: solid 3px var(--color-1);
   border-radius: 8px;
   overflow: hidden;
+  transition: transform 0.2s ease;
 }
 
 /* 画像ラッパー */
@@ -338,7 +339,6 @@ header {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-bottom: solid 3px var(--color-1);
 }
 
 /* 画像トリミング */
@@ -434,16 +434,17 @@ header {
   transition: transform 0.2s ease;
 }
 
-/* ======== STREAM ======== */
+/* ======== 配信スケジュール ======== */
 .card-link {
   text-decoration: none;
   color: inherit;
-  display: block;
+  display: flex;
+  transition: transform 0.2s ease;
 }
 
 .card-link:hover .card {
   transform: translateY(-3px);
-  box-shadow: 4px 6px 16px rgba(0,0,0,0.12);
+  box-shadow: 3px 4px 8px rgba(0,0,0,0.1);
 }
 
 .thumb {
@@ -465,86 +466,55 @@ header {
   align-items: center;
 }
 
-.live-badge {
-  display: inline-block;
-  background: #ff3b30;
-  color: white;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  margin: 0px 0px 6px -2px;
+.StatusDate {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
 }
 
-.live-badge-empty {
-  display: inline-block;
-  background: #666666;
-  color: white;
-  padding: 3px 10px;
+.status {
+  width: fit-content;
+}
+
+.status-ended { 
+  background: var(--color-1);  
+  color: var(--color-8);
+  padding: 0 0.75rem;
+  border: solid 1.5px var(--color-1);
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-  margin: 0px 0px 6px -2px;
+}
+.status-now { 
+  background: var(--color-4); 
+  color: var(--color-8);
+  padding: 0 0.75rem;
+  border: solid 1.5px var(--color-1);
+  border-radius: 999px;
+}
+.status-futurePlan { 
+  background: var(--color-8); 
+  color: var(--color-1);
+  padding: 0 0.75rem;
+  border: solid 1.5px var(--color-1);
+  border-radius: 999px;
 }
 
 .title {
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.6;
+  font-size: 1.2rem;
   width: 100%;
+  
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  word-break: break-word;
 }
 
 .empty {
   color: #666;
   font-size: 14px;
-}
-
-/* ======== フッター ======== */
-
-footer {
-  background: var(--color-1);
-  padding: 4.5rem 3%;
-}
-
-footer a {
-  text-decoration: none;
-}
-
-.footer_top {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-}
-
-.footer__logo {
-  display: flex;
-  font-family: "Righteous", sans-serif;
-  color: var(--color-2);
-  font-size: 3rem;
-  line-height: 1;
-  letter-spacing: 0.05em;
-}
-
-.footer__link--X {
-  display: flex;
-  color: var(--color-1);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  background-color: var(--color-2);
-  padding: 0 1.6rem;
-  border-radius: 999px;
-}
-
-hr.footer-divider {
-  background-color: var(--color-2);
-  height: 1px;
-  border: none;
-}
-
-.footer_bottom {
-  text-align: center;
-  margin-top: 2rem;
-  color: var(--color-2);
-  font-size: 1.2rem;
-  font-weight: 700;
 }
