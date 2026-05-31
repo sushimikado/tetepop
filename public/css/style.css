@@ -164,20 +164,21 @@ header {
 
 .nav__pc {
   display: flex;
+  padding: 0 2rem;
+  height: auto;
+  background-color: var(--color-1);
+  border-radius: 999px;
 }
 
 .nav__pc a {
   display: inline-block;
+  align-items: center;
   padding: 0 2rem;
   font-family: "Righteous", sans-serif;
   font-size: 2.4rem;
   line-height: 1.5;
   color: var(--color-8);
   text-decoration: none;
-  padding: 0 2rem;
-  height: auto;
-  background-color: var(--color-1);
-  border-radius: 999px;
 }
 
 .header__btn {
