@@ -315,8 +315,9 @@ const html = filteredStreams.length === 0
           <div class="card">
             <img class="thumb" src="${v.thumbnail}">
             <div class="card-bottom">
-              <div class="status ${statusClass}">${statusText}</div>
-              <div class="title">${v.title.replace(/</g, "&lt;")}</div>
+              <div class="status">
+                <p class="${statusClass}">${statusText}</p>
+              </div>
               <div class="name">${v.memberName}</div>
               <div class="stream-date">
                 ${
@@ -332,6 +333,7 @@ const html = filteredStreams.length === 0
                   )
                 }
               </div>
+              <div class="title">${v.title.replace(/</g, "&lt;")}</div>
             </div>
           </div>
         </a>
