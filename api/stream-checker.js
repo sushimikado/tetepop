@@ -315,7 +315,7 @@ const html = filteredStreams.length === 0
           <div class="card">
             <img class="thumb" src="${v.thumbnail}">
             <div class="card-bottom">
-              <div class="status-and-date">
+              <div class="StatusDate">
                 <div class="${statusClass}">${statusText}</div>
                 <div class="stream-date">
                   ${
