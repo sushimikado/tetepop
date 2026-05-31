@@ -69,6 +69,12 @@ body a:hover {
   background: var(--color-7);
 }
 
+@media (max-width: 426px) {
+  .container-body {
+    border-width: 0px;
+  }
+}
+
 /* ======== ヘッダー ======== */
 header {
   display: flex;
@@ -552,6 +558,13 @@ header {
 footer {
   background: var(--color-1);
   padding: 4.5rem 3%;
+}
+
+@media (max-width: 426px) {
+  footer {
+    background: var(--color-1);
+    padding: 4.5rem 5%;
+  }
 }
 
 footer a {
