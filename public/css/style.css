@@ -175,10 +175,9 @@ header {
 }
 
 .nav__pc a {
-  padding: 0 2rem;
+  padding: 0 2.4rem;
   font-family: "Righteous", sans-serif;
   font-size: 2.4rem;
-  line-height: 1.5;
   color: var(--color-8);
   text-decoration: none;
 }
