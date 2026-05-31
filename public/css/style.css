@@ -73,11 +73,13 @@ body a:hover {
 header {
   display: flex;
   justify-content:space-between;
+  align-items: center;
   position: sticky;
   top: 0;
   z-index: 2;
   background: var(--color-7);
   border-bottom: solid 3px var(--color-1);
+
 }
 
 .header__mark {
