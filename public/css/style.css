@@ -466,27 +466,34 @@ header {
 
 .status-and-date {
   display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
   font-weight: 700;
+  line-height: 1.5rem;
 }
 
 .status-ended { 
   background: var(--color-4); 
   color: var(--color-8);
   width: fit-content;
+  padding: 0 1rem;
 }
 .status-now { 
   background: var(--color-3); 
   color: var(--color-8);
   width: fit-content;
+  padding: 0 1rem;
 }
 .status-futurePlan { 
   background: var(--color-5); 
   color: var(--color-8);
   width: fit-content;
+  padding: 0 1rem;
 }
 
 .title {
   font-size: 1.2rem;
+  line-height: 1.5rem;
   width: 100%;
   
   display: -webkit-box;
