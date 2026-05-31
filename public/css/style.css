@@ -330,6 +330,7 @@ header {
   border: solid 3px var(--color-1);
   border-radius: 8px;
   overflow: hidden;
+  transition: transform 0.2s ease;
 }
 
 /* 画像ラッパー */
@@ -437,7 +438,7 @@ header {
   text-decoration: none;
   color: inherit;
   display: flex;
-  transition: transform 0.4s ease;
+  transition: transform 0.2s ease;
 }
 
 .card-link:hover .card {
