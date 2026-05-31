@@ -164,6 +164,7 @@ header {
 
 .nav__pc {
   display: flex;
+  align-items: center;
   padding: 0 2rem;
   height: auto;
   background-color: var(--color-1);
@@ -171,8 +172,6 @@ header {
 }
 
 .nav__pc a {
-  display: inline-block;
-  align-items: center;
   padding: 0 2rem;
   font-family: "Righteous", sans-serif;
   font-size: 2.4rem;
