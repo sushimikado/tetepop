@@ -328,7 +328,7 @@ const html = filteredStreams.length === 0
                         hour: "2-digit",
                         minute: "2-digit"
                       }
-                    )
+                    ) + "～"
                   }
                 </div>
               </div>
