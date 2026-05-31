@@ -464,33 +464,31 @@ header {
   align-items: center;
 }
 
-.status-and-date {
+.StatusDate {
   display: flex;
   gap: 1rem;
   font-size: 1.2rem;
   font-weight: 700;
 }
 
-.status-ended { 
-  background: var(--color-4); 
-  color: var(--color-8);
+.status {
   width: fit-content;
   padding: 0 0.75rem;
+  border: solid 1.5px var(--color-1);
   border-radius: 999px;
+}
+
+.status-ended { 
+  background: #eeeeee; 
+  color: var(--color-1);
 }
 .status-now { 
-  background: var(--color-3); 
+  background: var(--color-1); 
   color: var(--color-8);
-  width: fit-content;
-  padding: 0 0.75rem;
-  border-radius: 999px;
 }
 .status-futurePlan { 
-  background: var(--color-5); 
-  color: var(--color-8);
-  width: fit-content;
-  padding: 0 0.75rem;
-  border-radius: 999px;
+  background: var(--color-8); 
+  color: var(--color-1);
 }
 
 .title {
