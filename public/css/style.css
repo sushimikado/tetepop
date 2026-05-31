@@ -242,7 +242,7 @@ header {
   width: auto;
 }
 
-@media (max-width: 424px) {
+@media (max-width: 426px) {
   .section-top {
     margin-bottom: -1rem;
   }
