@@ -60,18 +60,13 @@ async function loadNotionCMS() {
       }
 
       // ナビゲーション
-      const navTarget = document.querySelector(
-        `[data-cms-nav__sp="${item.title}"]`
-      );
-      if (navTarget) {
-        navTarget.textContent = item.title;
-      }
-      const navTarget = document.querySelector(
-        `[data-cms-nav__pc="${item.title}"]`
-      );
-      if (navTarget) {
-        navTarget.textContent = item.title;
-      }
+      document
+        .querySelectorAll(
+          `[data-cms-nav="${item.title}"]`
+        )
+        .forEach(el => {
+          el.textContent = item.title;
+        });
 
       // 日本語タイトル
       const jaTarget = document.querySelector(
