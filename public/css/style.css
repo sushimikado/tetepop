@@ -473,22 +473,28 @@ header {
 
 .status {
   width: fit-content;
+}
+
+.status-ended { 
+  background: #AAAAAA; 
+  color: var(--color-1);
   padding: 0 0.75rem;
   border: solid 1.5px var(--color-1);
   border-radius: 999px;
 }
-
-.status-ended { 
-  background: #eeeeee; 
-  color: var(--color-1);
-}
 .status-now { 
   background: var(--color-1); 
   color: var(--color-8);
+  padding: 0 0.75rem;
+  border: solid 1.5px var(--color-1);
+  border-radius: 999px;
 }
 .status-futurePlan { 
   background: var(--color-8); 
   color: var(--color-1);
+  padding: 0 0.75rem;
+  border: solid 1.5px var(--color-1);
+  border-radius: 999px;
 }
 
 .title {
