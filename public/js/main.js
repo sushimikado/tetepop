@@ -36,10 +36,10 @@ async function loadNotionCMS() {
   try {
 
     // 本番
-    const response = await fetch("/api/contents");
+    // const response = await fetch("/api/contents");
 
     // ローカルテスト用
-    // const response = await fetch("/test-data.json");
+    const response = await fetch("/test-data.json");
 
     const contents = await response.json();
 
@@ -161,6 +161,26 @@ async function loadNotionCMS() {
       memberArea.innerHTML = memHtml;
     }
 
+    // =========================
+    // 過去イベント
+    // =========================
+    const historyArea =
+      document.getElementById("HISTORY-LIST");
+
+    if (historyArea) {
+
+      const historyRes =
+        await fetch("/api/history", {
+          cache: "no-store"
+        });
+
+      const historyHtml =
+        await historyRes.text();
+
+      historyArea.innerHTML =
+        historyHtml;
+    }
+
   } catch (error) {
 
     console.error(
@@ -222,26 +242,6 @@ async function loadStreamChecker() {
         </div>
     `;
   }
-}
-
-// =========================
-// 過去イベント
-// =========================
-const historyArea =
-  document.getElementById("HISTORY-LIST");
-
-if (historyArea) {
-
-  const historyRes =
-    await fetch("/api/history", {
-      cache: "no-store"
-    });
-
-  const historyHtml =
-    await historyRes.text();
-
-  historyArea.innerHTML =
-    historyHtml;
 }
 
 // =========================
