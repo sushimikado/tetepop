@@ -1,4 +1,4 @@
-// リッチテキストをHTMLに変換する関数
+// リッチテキストをHTMLに
 function renderRichText(richTextArray) {
   return richTextArray.map(t => {
     let text = t.plain_text.replace(/\n/g, "<br>");
@@ -36,10 +36,10 @@ async function loadNotionCMS() {
   try {
 
     // 本番
-    const response = await fetch("/api/contents");
+    // const response = await fetch("/api/contents");
 
     // ローカルテスト用
-    // const response = await fetch("/test-data.json");
+    const response = await fetch("/test-data.json");
 
     const contents = await response.json();
 
@@ -222,6 +222,26 @@ async function loadStreamChecker() {
         </div>
     `;
   }
+}
+
+// =========================
+// 過去イベント
+// =========================
+const historyArea =
+  document.getElementById("HISTORY-LIST");
+
+if (historyArea) {
+
+  const historyRes =
+    await fetch("/api/history", {
+      cache: "no-store"
+    });
+
+  const historyHtml =
+    await historyRes.text();
+
+  historyArea.innerHTML =
+    historyHtml;
 }
 
 // =========================
