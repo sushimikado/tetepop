@@ -127,12 +127,7 @@ export default async function handler(req, res) {
 const html =
   items.map(item => `
 
-<a
-  href="${item.url || "#"}"
-  target="_blank"
-  rel="noopener noreferrer"
-  class="history-card"
->
+<a href="${item.url}" target="_blank" class="history-card">
   <div class="history-image">
     ${
       item.image
