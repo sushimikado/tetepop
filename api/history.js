@@ -121,48 +121,55 @@ export default async function handler(req, res) {
       new Date(a.startDate)
     );
 
+    console.log(items);
+
     // =========================
     // HTML生成
     // =========================
-const html =
-  items.map(item => `
+    const html =
+      items.map(item => `
 
-<a href="${item.url}" target="_blank" class="history-card">
-  <div class="history-image">
-    ${
-      item.image
-        ? `<img
-             src="${item.image}"
-             alt="${escapeHtml(item.title)}"
-           >`
-        : ""
-    }
-  </div>
+    <a
+      href="${item.url || "#"}"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="history-card"
+    >
+      <div class="history-image">
+        ${
+          item.image
+            ? `<img
+                src="${item.image}"
+                alt="${escapeHtml(item.title)}"
+              >`
+            : ""
+        }
+      </div>
 
-  <div class="history-info">
+      <div class="history-info">
 
-    <div class="history-date">
-      ${formatPeriod(
-        item.startDate,
-        item.endDate
-      )}
-    </div>
+        <div class="history-date">
+          ${formatPeriod(
+            item.startDate,
+            item.endDate
+          )}
+        </div>
 
-    <div class="history-title">
-      ${escapeHtml(item.title)}
-    </div>
+        <div class="history-title">
+          ${escapeHtml(item.title)}
+        </div>
 
-  </div>
-</a>
+      </div>
+    </a>
 
-`).join("");
+    `).join("");
 
-    res.setHeader(
-      "Content-Type",
-      "text/html"
-    );
+        res.setHeader(
+          "Content-Type",
+          "text/html"
+        );
 
-    res.status(200).send(html);
+        res.status(200).send(html);
 
   } catch (e) {
 
