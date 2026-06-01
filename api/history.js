@@ -121,8 +121,6 @@ export default async function handler(req, res) {
       new Date(a.startDate)
     );
 
-    console.log(items);
-
     // =========================
     // HTML生成
     // =========================
