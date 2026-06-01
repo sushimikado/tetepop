@@ -557,58 +557,42 @@ header {
 .history-carousel {
   display: flex;
   gap: 16px;
-
   overflow-x: auto;
-
   scroll-snap-type: x proximity;
-
   padding-bottom: 12px;
 }
 
 .history-card {
-
   flex: 0 0 280px;
-
   text-decoration: none;
-
-  color: inherit;
-
   border: solid 3px var(--color-1);
-
   border-radius: 8px;
-
   overflow: hidden;
-
-  background: #fff;
-
   scroll-snap-align: start;
 }
 
-.history-image-wrap {
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-}
-
-.history-image {
+.history-image img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
 }
 
 .history-info {
   padding: 12px;
-}
-
-.history-date {
-  font-size: 1.2rem;
-  opacity: 0.7;
-  margin-bottom: 4px;
+  background-color: var(--color-1);
+  color: var(--color-8);
+  line-height: 1.5;
 }
 
 .history-title {
   font-weight: 700;
-  line-height: 1.5;
+  font-size: 1.4rem;
 }
+
+.history-date {
+  font-size: 1.2rem;
+}
+
 
 /* ======== フッター ======== */
 
