@@ -279,8 +279,8 @@ header {
   /* box-shadow: var(--color-1) 5px 5px 0px; */
 }
 
-#ABOUT .item-titleJa {
-  background: var(--color-4);
+#ABOUT .item-titleJa, #HISTORY .item-titleJa {
+  background: var(--color-5);
 }
 
 #NEWS .item-titleJa {
@@ -288,7 +288,7 @@ header {
 }
 
 #STREAM .item-titleJa {
-  background: var(--color-5);
+  background: var(--color-4);
 }
 
 #MEMBERS .item-titleJa {
