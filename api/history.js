@@ -92,8 +92,13 @@ export default async function handler(req, res) {
       const startDate =
         new Date(start);
 
+      const startYear =
+        startDate.getFullYear();
+
       const startText =
-        `${startDate.getMonth() + 1}/${startDate.getDate()}`;
+        `${startYear}.` +
+        `${String(startDate.getMonth() + 1).padStart(2, "0")}.` +
+        `${String(startDate.getDate()).padStart(2, "0")}`;
 
       if (!end) {
         return startText;
@@ -102,10 +107,26 @@ export default async function handler(req, res) {
       const endDate =
         new Date(end);
 
-      const endText =
-        `${endDate.getMonth() + 1}/${endDate.getDate()}`;
+      const endYear =
+        endDate.getFullYear();
 
-      if (startText === endText) {
+      const endText =
+        startYear === endYear
+
+          // 同じ年なら年を省略
+          ? `${String(endDate.getMonth() + 1).padStart(2, "0")}.` +
+            `${String(endDate.getDate()).padStart(2, "0")}`
+
+          // 違う年ならフル表示
+          : `${endYear}.` +
+            `${String(endDate.getMonth() + 1).padStart(2, "0")}.` +
+            `${String(endDate.getDate()).padStart(2, "0")}`;
+
+      if (
+        startDate.getTime()
+        ===
+        endDate.getTime()
+      ) {
         return startText;
       }
 
@@ -145,18 +166,15 @@ export default async function handler(req, res) {
       </div>
 
       <div class="history-info">
-
+        <div class="history-title">
+          ${escapeHtml(item.title)}
+        </div>
         <div class="history-date">
           ${formatPeriod(
             item.startDate,
             item.endDate
           )}
         </div>
-
-        <div class="history-title">
-          ${escapeHtml(item.title)}
-        </div>
-
       </div>
     </a>
 
