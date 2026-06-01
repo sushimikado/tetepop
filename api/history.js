@@ -124,25 +124,24 @@ export default async function handler(req, res) {
     // =========================
     // HTML生成
     // =========================
-    const html =
-      items.map(item => {
+const html =
+  items.map(item => `
 
-        const imageHtml =
-          item.image
-            ? `
-              <img
-                src="${item.image}"
-                alt="${escapeHtml(item.title)}"
-              >
-            `
-            : "";
-
-        const card = `
-
-<div class="history-card">
-
+<a
+  href="${item.url || "#"}"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="history-card"
+>
   <div class="history-image">
-    ${imageHtml}
+    ${
+      item.image
+        ? `<img
+             src="${item.image}"
+             alt="${escapeHtml(item.title)}"
+           >`
+        : ""
+    }
   </div>
 
   <div class="history-info">
@@ -159,23 +158,9 @@ export default async function handler(req, res) {
     </div>
 
   </div>
-
-</div>
-`;
-
-        return item.url
-          ? `
-<a
-  href="${item.url}"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  ${card}
 </a>
-`
-          : card;
 
-      }).join("");
+`).join("");
 
     res.setHeader(
       "Content-Type",
