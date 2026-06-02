@@ -554,12 +554,53 @@ header {
 }
 
 /* ======== 過去イベント ======== */
-.history-carousel {
+.history-wrapper {
+  position: relative;
+}
+
+.history-list {
   display: flex;
   gap: 16px;
   overflow-x: auto;
   scroll-snap-type: x proximity;
-  padding-bottom: 12px;
+  padding: 12px 24px;
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #A9D4F5;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-1);
+    border-radius: 4px;
+  }
+}
+
+.history-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border: solid 3px var(--color-1);
+  border-radius: 50%;
+  background: var(--color-1);
+  color: var(--color-8);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.history-btn:hover {
+  background: var(--color-2);
+}
+
+.history-prev {
+  left: 0px;
+}
+
+.history-next {
+  right: 0px;
 }
 
 .history-card {
@@ -568,7 +609,7 @@ header {
   border: solid 3px var(--color-1);
   border-radius: 8px;
   overflow: hidden;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
 }
 
 .history-image img {
@@ -627,11 +668,17 @@ footer a {
   letter-spacing: 0.05em;
 }
 
-.footer__link--X {
+.footer__link {
   display: flex;
+  gap: 10px;
+}
+
+.footer__link--in {
+  display: flex;
+  align-items: center;
   color: var(--color-1);
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   background-color: var(--color-2);
   padding: 0 1.6rem;
   border-radius: 999px;
