@@ -145,7 +145,7 @@ async function loadNotionCMS() {
     });
 
     // =========================
-    // メンバー一覧
+    // MEMBER
     // =========================
     const memberArea =
       document.getElementById("MEMBER-LIST");
@@ -162,7 +162,7 @@ async function loadNotionCMS() {
     }
 
     // =========================
-    // 過去イベント
+    // HISTORY
     // =========================
     const historyArea =
       document.getElementById("HISTORY-LIST");
@@ -191,7 +191,7 @@ async function loadNotionCMS() {
 }
 
 // =========================
-// 配信スケジュール
+// STREAM
 // =========================
 async function loadStreamChecker() {
 
@@ -271,3 +271,42 @@ loadStreamChecker();
 
   });
 }
+
+// =========================
+// HISTORYボタン
+// =========================
+document.addEventListener(
+  "click",
+  function(e) {
+
+    const list =
+      document.getElementById(
+        "HISTORY-LIST"
+      );
+
+    if (!list) return;
+
+    if (
+      e.target.id === "history-next"
+    ) {
+
+      list.scrollBy({
+        left: 320,
+        behavior: "smooth"
+      });
+
+    }
+
+    if (
+      e.target.id === "history-prev"
+    ) {
+
+      list.scrollBy({
+        left: -320,
+        behavior: "smooth"
+      });
+
+    }
+
+  }
+);
