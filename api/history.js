@@ -136,10 +136,10 @@ export default async function handler(req, res) {
     // =========================
     // 開始日降順
     // =========================
-    items.sort((b, a) =>
-      new Date(a.startDate)
-      -
+    items.sort((a, b) =>
       new Date(b.startDate)
+      -
+      new Date(a.startDate)
     );
 
     // =========================
