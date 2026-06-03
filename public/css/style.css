@@ -585,14 +585,18 @@ header {
   height: 48px;
   border: solid 3px var(--color-1);
   border-radius: 50%;
-  background: var(--color-1);
+  background: var(--color-2);
   color: var(--color-8);
   cursor: pointer;
   z-index: 10;
 }
 
 .history-btn:hover {
-  background: var(--color-2);
+  background: var(--color-8);
+}
+
+.history-btn:hover .arrow_left, .history-btn:hover .arrow_right {
+  background-color: var(--color-1);
 }
 
 .history-prev {
@@ -601,6 +605,24 @@ header {
 
 .history-next {
   right: 0px;
+}
+
+.arrow_left {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto;
+  background-color: var(--color-8);
+  mask-image: url('/img/arrow_left.svg');
+  mask-size: 100%;
+}
+
+.arrow_right {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto;
+  background-color: var(--color-8);
+  mask-image: url('/img/arrow_right.svg');
+  mask-size: 100%;
 }
 
 .history-card {
@@ -620,9 +642,10 @@ header {
 
 .history-info {
   padding: 12px;
-  background-color: var(--color-1);
+  background-color: var(--color-2);
   color: var(--color-8);
   line-height: 1.5;
+  border-top: solid 3px var(--color-1);
 }
 
 .history-title {
