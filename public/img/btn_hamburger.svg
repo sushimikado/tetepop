@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="_レイヤー_1" data-name="レイヤー_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 240 240">
+<svg id="_レイヤー_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 240 240">
   <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
   <defs>
     <style>
@@ -8,7 +8,7 @@
       }
     </style>
   </defs>
-  <rect class="st0" y="102" width="240" height="36" rx="18" ry="18"/>
-  <rect class="st0" y="204" width="240" height="36" rx="18" ry="18"/>
-  <rect class="st0" y="0" width="240" height="36" rx="18" ry="18"/>
+  <path class="st0" d="M18,102h204c9.94,0,18,8.06,18,18h0c0,9.94-8.06,18-18,18H18c-9.94,0-18-8.06-18-18h0c0-9.94,8.06-18,18-18Z"/>
+  <path class="st0" d="M18,194h204c9.94,0,18,8.06,18,18h0c0,9.94-8.06,18-18,18H18c-9.94,0-18-8.06-18-18h0c0-9.94,8.06-18,18-18Z"/>
+  <path class="st0" d="M18,10h204c9.94,0,18,8.06,18,18h0c0,9.94-8.06,18-18,18H18C8.06,46,0,37.94,0,28h0C0,18.06,8.06,10,18,10Z"/>
 </svg>
