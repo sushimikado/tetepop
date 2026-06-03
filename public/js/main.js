@@ -275,38 +275,41 @@ loadStreamChecker();
 // =========================
 // HISTORYボタン
 // =========================
-document.addEventListener(
-  "click",
-  function(e) {
+const list =
+  document.getElementById(
+    "HISTORY-LIST"
+  );
 
-    const list =
-      document.getElementById(
-        "HISTORY-LIST"
-      );
+const nextBtn =
+  document.getElementById(
+    "history-next"
+  );
 
-    if (!list) return;
+const prevBtn =
+  document.getElementById(
+    "history-prev"
+  );
 
-    if (
-      e.target.id === "history-next"
-    ) {
+if (list && nextBtn && prevBtn) {
 
+  nextBtn.addEventListener(
+    "click",
+    () => {
       list.scrollBy({
         left: 320,
         behavior: "smooth"
       });
-
     }
+  );
 
-    if (
-      e.target.id === "history-prev"
-    ) {
-
+  prevBtn.addEventListener(
+    "click",
+    () => {
       list.scrollBy({
         left: -320,
         behavior: "smooth"
       });
-
     }
+  );
 
-  }
-);
+}
