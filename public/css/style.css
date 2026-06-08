@@ -270,7 +270,7 @@ header {
 }
 
 .about_article {
-  padding: 36px 10%;
+  padding: 36px 5%;
   position: relative;
   z-index: 2;
   text-shadow: 
@@ -322,9 +322,15 @@ hr.about-divider {
   transform: translateY(-50%);
 }
 
+@media (max-width: 1024px) {
+  .about_article{
+    padding: 36px 3%;
+  }
+}
+
 @media (max-width: 767px) {
   .about_article {
-    padding: 24px 2rem;
+    padding: 24px 3%;
   }
   .about_item {
     padding-right: 0;
