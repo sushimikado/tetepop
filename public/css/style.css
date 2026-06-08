@@ -359,6 +359,7 @@ header {
 }
 
 .about_title {
+  display: inline-block;
   font-family: "Righteous", sans-serif;
   font-size: 6rem;
   line-height: 1;
@@ -366,6 +367,7 @@ header {
 }
 
 .about_titleJa {
+  display: inline-block;
   line-height: 3;
 }
 
