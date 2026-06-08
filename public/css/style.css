@@ -348,7 +348,8 @@ header {
 }
 
 .about_article {
-  padding: 36px 10%;
+  padding: 36px auto;
+
   position: relative;
   z-index: 2;
   text-shadow: 
@@ -372,7 +373,7 @@ header {
 .about_item {
   display: inline-block;
   line-height: 1.5;
-  padding-right: 300px;
+  padding-right: 350px;
 }
 
 .about__text {
