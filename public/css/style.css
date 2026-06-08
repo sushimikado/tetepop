@@ -348,8 +348,6 @@ header {
 }
 
 .about_article {
-  display: flex;
-  flex-direction: column;
   margin: 36px auto;
   position: relative;
   z-index: 2;
@@ -361,7 +359,7 @@ header {
 }
 
 .about_title {
-  display: inline-block;
+  width: fit-content;
   font-family: "Righteous", sans-serif;
   font-size: 6rem;
   line-height: 1;
@@ -369,14 +367,14 @@ header {
 }
 
 .about_titleJa {
-  display: inline-block;
+  width: fit-content;
   line-height: 3;
 }
 
 .about_item {
   display: inline-block;
   line-height: 1.5;
-  padding-right: 350px;
+  margin-right: 350px;
 }
 
 .about__text {
@@ -387,12 +385,17 @@ header {
   margin-top: 1.6rem;
 }
 
-hr.about-divider {
+.about-divider {
+  background-color: var(--color-8);
+  width: 100%;
+  height: 1px;
+}
+/* hr.about-divider {
   width: 100%;
   background-color: var(--color-8);
   height: 1px;
   border: none;
-}
+} */
 
 .about_img {
   position: absolute;
