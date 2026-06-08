@@ -126,7 +126,7 @@
             <section class="news">
                 <div id="NEWS" class="news-container">
                     <div class="news_top">                    
-                        <h2 class="news_title" data-cms-title="NEWS"></h2>
+                        <h2 class="news_title bounce" data-cms-title="NEWS"></h2>
                         <h3 class="news_titleJa" data-cms-titleJa="NEWS"></h3>
                     </div>
                     <div class="news_item">
@@ -155,7 +155,7 @@
             <article class="main-article">
                 <!-- ======== STREAM ======== -->
                 <section id="STREAM" class="section-container">
-                    <div class="section-top">
+                    <div class="section-top bounce">
                         <img src="img/tetepop_character.png" class="item-title-img" alt="タイトルアイコン">
                         <h2 class="item-title" data-cms-title="STREAM"></h2>
                     </div>
@@ -165,14 +165,21 @@
                         </div>
                         <div class="item-body">
                             <p class="stream__text" data-cms-text="STREAM"></p>
-                            <div id="STREAM-LIST" class="grid"></div>
+                            <div id="STREAM-LIST" class="grid">
+                                <div class="loading">
+                                    <img src="img/tetepop_character.png" class="loading-img" alt="ローディング">
+                                    <p class="loading-text">
+                                        LOADING<span class="dots"></span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- ======== MEMBERS ======== -->
                 <section id="MEMBERS" class="section-container">
-                    <div class="section-top">
+                    <div class="section-top bounce">
                         <img src="img/tetepop_character.png" class="item-title-img" alt="タイトルアイコン">
                         <h2 class="item-title" data-cms-title="MEMBERS"></h2>
                     </div>
@@ -182,14 +189,21 @@
                         </div>
                         <div class="item-body">
                             <p class="members__text" data-cms-text="MEMBERS"></p>
-                            <div id="MEMBER-LIST" class="grid"></div>
+                            <div id="MEMBER-LIST" class="grid">
+                                <div class="loading">
+                                    <img src="img/tetepop_character.png" class="loading-img" alt="ローディング">
+                                    <p class="loading-text">
+                                        LOADING<span class="dots"></span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- ======== HISTORY ======== -->
                 <section id="HISTORY" class="section-container">
-                    <div class="section-top">
+                    <div class="section-top bounce">
                         <img src="img/tetepop_character.png" class="item-title-img" alt="タイトルアイコン">
                         <h2 class="item-title" data-cms-title="HISTORY"></h2>
                     </div>
@@ -203,7 +217,14 @@
                                 <button class="history-btn history-prev" id="history-prev">
                                     <div class="arrow_left"></div>
                                 </button>
-                                <div id="HISTORY-LIST" class="history-list"></div>
+                                <div id="HISTORY-LIST" class="history-list">
+                                    <div class="loading">
+                                        <img src="img/tetepop_character.png" class="loading-img" alt="ローディング">
+                                        <p class="loading-text">
+                                            LOADING<span class="dots"></span>
+                                        </p>
+                                    </div>
+                                </div>
                                 <button class="history-btn history-next" id="history-next">
                                     <div class="arrow_right"></div>
                                 </button>
