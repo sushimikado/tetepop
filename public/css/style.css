@@ -348,6 +348,8 @@ header {
 }
 
 .about_article {
+  display: flex;
+  flex-direction: column;
   margin: 36px auto;
   position: relative;
   z-index: 2;
