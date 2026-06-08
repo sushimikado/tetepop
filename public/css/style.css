@@ -298,18 +298,12 @@ header {
 }
 
 .about__text {
-  /* display: inline-block; */
   margin-bottom: 1.6rem;
 }
 
 .tag__text {
-  /* display: inline-block; */
   margin-top: 1.6rem;
 }
-
-/* .about-divider {
-  width: 100%;
-} */
 
 hr.about-divider {
   width: 100%;
@@ -321,10 +315,10 @@ hr.about-divider {
 .about_img {
   position: absolute;
   z-index: 1;
-  width: 420px;
+  width: 480px;
   height: auto;
   top: 50%;
-  right: -120px;
+  right: -140px;
   transform: translateY(-50%);
 }
 
