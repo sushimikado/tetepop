@@ -78,6 +78,84 @@ body a:hover {
   }
 }
 
+/* ======== アニメーション ======== */
+/* 見出しバウンスイン */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bounce {
+  opacity: 0;
+}
+
+.bounce.show {
+  animation: bounceIn 1s forwards;
+  animation-delay: 0.3s;
+}
+
+/* ローディング */
+.loading {
+  display: flex;
+  gap: 10px;
+  color: var(--color-1);
+  font-family: "Righteous", sans-serif;
+  font-size: 2.4rem;
+}
+
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.loading-img{
+  width: 42px;
+  animation: jump 1s ease-in-out infinite;
+}
+
+.dots::after {
+  content: ".";
+  animation: dots 1.8s infinite;
+}
+
+@keyframes dots {
+  0% {
+    content: " ";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+  100% {
+    content: " ";
+  }
+}
+
 /* ======== ヘッダー ======== */
 header {
   display: flex;
@@ -270,7 +348,7 @@ header {
 }
 
 .about_article {
-  padding: 36px 5%;
+  padding: 36px 10%;
   position: relative;
   z-index: 2;
   text-shadow: 
@@ -324,7 +402,7 @@ hr.about-divider {
 
 @media (max-width: 1024px) {
   .about_article{
-    padding: 36px 3%;
+    padding: 36px 5%;
   }
 }
 
