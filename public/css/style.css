@@ -270,7 +270,7 @@ header {
 }
 
 .about_article {
-  padding: 36px 3rem;
+  padding: 36px 10%;
   position: relative;
   z-index: 2;
   text-shadow: 
@@ -315,10 +315,10 @@ hr.about-divider {
 .about_img {
   position: absolute;
   z-index: 1;
-  width: 480px;
+  width: 500px;
   height: auto;
   top: 50%;
-  right: -140px;
+  right: -150px;
   transform: translateY(-50%);
 }
 
