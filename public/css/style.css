@@ -297,13 +297,13 @@ header {
 }
 
 .about__text {
+  display: inline-block;
   margin-bottom: 1.6rem;
-	display: inline;
 }
 
 .tag__text {
+  display: inline-block;
   margin-top: 1.6rem;
-	display: inline;
 }
 
 hr.about-divider {
