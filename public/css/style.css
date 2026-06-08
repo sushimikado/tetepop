@@ -406,7 +406,6 @@ header {
 @media (max-width: 767px) {
   .about_article {
     margin: 24px auto;
-    padding: 0 2%;
   }
   .about_item {
     margin-right: 0;
