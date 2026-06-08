@@ -292,21 +292,27 @@ header {
 }
 
 .about_item {
+  display: inline-block;
   line-height: 1.5;
   padding-right: 300px;
 }
 
 .about__text {
-  display: inline-block;
+  /* display: inline-block; */
   margin-bottom: 1.6rem;
 }
 
 .tag__text {
-  display: inline-block;
+  /* display: inline-block; */
   margin-top: 1.6rem;
 }
 
+/* .about-divider {
+  width: 100%;
+} */
+
 hr.about-divider {
+  width: 100%;
   background-color: var(--color-8);
   height: 1px;
   border: none;
