@@ -375,7 +375,7 @@ header {
 .about_item {
   display: inline-block;
   line-height: 1.5;
-  margin-right: 350px;
+  margin-right: 320px;
 }
 
 .about__text {
@@ -402,18 +402,12 @@ header {
   transform: translateY(-50%);
 }
 
-@media (max-width: 1024px) {
-  .about_article{
-    padding: 36px 5%;
-  }
-}
-
 @media (max-width: 767px) {
   .about_article {
-    padding: 24px 3%;
+    margin: 24px auto;
   }
   .about_item {
-    padding-right: 0;
+    margin-right: 0;
   }
   .about_img {
     width: 240px;
