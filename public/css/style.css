@@ -348,8 +348,7 @@ header {
 }
 
 .about_article {
-  padding: 36px auto;
-
+  margin: 36px auto;
   position: relative;
   z-index: 2;
   text-shadow: 
