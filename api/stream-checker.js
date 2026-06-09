@@ -272,7 +272,7 @@ console.log(
 
 // 4. HTML生成
 const html = filteredStreams.length === 0 
-  ? '<div class="card"><div class="title">配信情報が見つかりません</div></div>'
+  ? '<div class="card"><div class="card-bottom"><div class="title">配信情報が見つかりません</div></div></div>'
   : filteredStreams.map(v => {
 
       const scheduled =
