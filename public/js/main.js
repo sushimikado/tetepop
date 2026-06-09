@@ -153,7 +153,7 @@ async function loadNotionCMS() {
     if (memberArea) {
 
       const memRes = await fetch("/api/members", {
-        cache: "no-store"
+        cache: "default"
       });
 
       const memHtml = await memRes.text();
@@ -171,7 +171,7 @@ async function loadNotionCMS() {
 
       const historyRes =
         await fetch("/api/history", {
-          cache: "no-store"
+          cache: "default"
         });
 
       const historyHtml =
