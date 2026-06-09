@@ -89,12 +89,12 @@ const recentStreams =
       7 * 24 * 60 * 60 * 1000;
 
     // タイトルフィルター
-    // const isTetepopu =
-    //   v.title.includes("#ててぽぷ");
+    const isTetepopu =
+      v.title.includes("#ててぽぷ");
 
     return (
       isRecent
-      // && isTetepopu
+      && isTetepopu
     );
 
   });
