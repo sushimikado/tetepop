@@ -86,7 +86,7 @@ const recentStreams =
     const isRecent =
       now - publishedTime
       <
-      7 * 24 * 60 * 60 * 1000;
+      10 * 24 * 60 * 60 * 1000;
 
     // タイトルフィルター
     const isTetepopu =
